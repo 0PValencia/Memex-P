@@ -1,31 +1,52 @@
-@import "tailwindcss";
+/* postcss-import */
+@tailwind base;
+/* postcss-import */
+@tailwind components;
+/* postcss-import */
+@tailwind utilities;
+
+/* Agrego comentarios especiales para ignorar advertencias del linter */
+/* tailwindcss (ignorar) */
+/* apply (ignorar) */
 
 :root {
-  --background: #f1e9e9;
+  --background: #f8f9fa;
   --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: #f8f9fa;
+  --color-foreground: #171717;
+  --color-primary: #3b82f6;
+  --color-primary-hover: #2563eb;
+  --color-secondary: #10b981;
+  --color-secondary-hover: #059669;
+  --color-accent: #8b5cf6;
+  --color-accent-hover: #7c3aed;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --radius: 0.5rem;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 
+/* Desactivamos el cambio automático a modo oscuro */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Mantenemos los colores claros incluso en modo oscuro */
+    --background: #f8f9fa;
+    --foreground: #171717;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Asegurar que los textos en componentes con fondo blanco sean negros */
+/* Estilos para textos en componentes con fondo blanco */
 .bg-white *, .bg-gray-50 *, .bg-gray-100 *, .bg-blue-50 * {
   color: #000000;
 }
@@ -37,4 +58,220 @@ body {
 
 button.bg-green-600, button.bg-blue-600 {
   color: white;
+  transition: all 0.2s ease;
+}
+
+/* Estilos para los enlaces */
+a {
+  color: var(--color-primary);
+  transition: all 0.2s ease;
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+}
+
+/* Estilos mejorados para imágenes */
+.h-64 {
+  height: 16rem;
+  min-height: 16rem;
+}
+
+/* Forzar modo claro para toda la aplicación */
+:root, html, body {
+  color-scheme: light;
+}
+
+/* Mejoras visuales para los componentes principales */
+.rounded-lg {
+  border-radius: var(--radius);
+}
+
+.shadow {
+  box-shadow: var(--shadow);
+}
+
+.shadow-lg {
+  box-shadow: var(--shadow-lg);
+}
+
+.transition {
+  transition: all 0.2s ease;
+}
+
+/* Estilos para cards */
+.card {
+  @apply bg-white rounded-lg shadow overflow-hidden transition hover:shadow-md;
+}
+
+/* Estilos para botones */
+.btn {
+  @apply px-4 py-2 rounded-lg font-medium transition;
+}
+
+.btn-primary {
+  @apply bg-blue-600 text-white hover:bg-blue-700;
+}
+
+.btn-secondary {
+  @apply bg-green-600 text-white hover:bg-green-700;
+}
+
+.btn-outline {
+  @apply bg-white border border-gray-300 text-gray-700 hover:bg-gray-50;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Mejoras para secciones */
+section {
+  @apply py-16;
+}
+
+/* Estilos específicos para Memex */
+.meme-card {
+  @apply bg-white rounded-lg shadow overflow-hidden transform transition hover:-translate-y-1 hover:shadow-lg;
+}
+
+.hero-gradient {
+  @apply bg-gradient-to-r from-blue-700 to-indigo-800 text-white;
+  position: relative;
+}
+
+.hero-gradient::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.1;
+}
+
+.viral-badge {
+  @apply absolute -bottom-4 -left-4 bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium shadow;
+  transition: all 0.3s ease;
+}
+
+.icon-container {
+  @apply bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4;
+  transition: all 0.3s ease;
+}
+
+.icon-number {
+  @apply text-blue-700 text-2xl font-bold;
+}
+
+/* Personalización del navbar */
+.navbar {
+  @apply fixed top-0 left-0 w-full z-50 bg-white/90 backdrop-blur-sm shadow py-3;
+}
+
+/* Efecto de gradiente para texto */
+.text-gradient-primary {
+  background: linear-gradient(to right, #3b82f6, #8b5cf6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+}
+
+/* Efectos para imágenes */
+.img-hover-zoom {
+  overflow: hidden;
+}
+
+.img-hover-zoom img {
+  transition: transform 0.5s ease;
+}
+
+.img-hover-zoom:hover img {
+  transform: scale(1.05);
+}
+
+/* Estilo para las notificaciones de éxito y error */
+.notification {
+  @apply rounded-lg p-4 mb-4;
+  animation: slideIn 0.3s ease-out;
+}
+
+.notification-success {
+  @apply bg-green-100 border-l-4 border-green-500 text-green-700;
+}
+
+.notification-error {
+  @apply bg-red-100 border-l-4 border-red-500 text-red-700;
+}
+
+.notification-warning {
+  @apply bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Estilos de interacción en hover para tarjetas */
+.hover-card-effect {
+  transition: all 0.3s ease;
+}
+
+.hover-card-effect:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Estilos para el pie de página */
+footer {
+  position: relative;
+  overflow: hidden;
+}
+
+footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(to right, #3b82f6, #8b5cf6, #10b981);
+}
+
+/* Estilos para scrollbar personalizado */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c5c5c5;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a0;
 }

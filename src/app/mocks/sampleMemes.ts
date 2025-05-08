@@ -1,29 +1,64 @@
-export const sampleMemes = [
-  {
-    id: "1",
-    title: "Meme 1",
-    description: "Este es el primer meme de ejemplo",
-    imageUrl: "https://placehold.co/500x300/CCCCCC/333333?text=Meme+1",
-    creator: "0x1234...5678",
-    currentBets: 5,
-    totalPot: 0.5
-  },
-  {
-    id: "2",
-    title: "Meme 2",
-    description: "Este es el segundo meme de ejemplo",
-    imageUrl: "https://placehold.co/500x300/CCCCCC/333333?text=Meme+2", 
-    creator: "0x8765...4321",
-    currentBets: 3,
-    totalPot: 0.3
-  },
-  {
-    id: "3",
-    title: "Meme 3",
-    description: "Este es el tercer meme de ejemplo",
-    imageUrl: "https://placehold.co/500x300/CCCCCC/333333?text=Meme+3",
-    creator: "0x5432...1098",
-    currentBets: 7,
-    totalPot: 0.7
+import { useEffect, useState } from 'react';
+
+export interface Meme {
+  id: string;
+  title: string;
+  imageUrl: string;
+  description: string;
+  creator: string;
+  currentBets: number;
+  totalPot: number;
+  createdAt?: string; // Fecha de creación como string ISO
+}
+
+// No hay memes de ejemplo predeterminados
+export const sampleMemes: Meme[] = [];
+
+// Crear un evento personalizado para notificar cambios en los memes
+export const MEME_UPDATE_EVENT = 'memex_memes_updated';
+
+// Función para disparar actualización de memes
+export function triggerMemesUpdate() {
+  if (typeof window !== 'undefined') {
+    // Disparar evento personalizado para actualizar los memes en todos los componentes
+    window.dispatchEvent(new CustomEvent(MEME_UPDATE_EVENT));
   }
-]; 
+}
+
+// Hook para obtener memes guardados localmente
+export function useAllMemes() {
+  const [allMemes, setAllMemes] = useState<Meme[]>([]);
+  
+  // Función para cargar memes del almacenamiento local
+  const loadMemes = () => {
+    if (typeof window !== 'undefined') {
+      try {
+        const savedMemesJson = localStorage.getItem('memex_uploaded_memes');
+        if (savedMemesJson) {
+          const savedMemes = JSON.parse(savedMemesJson);
+          setAllMemes(savedMemes);
+        }
+      } catch (error) {
+        console.error('Error al cargar memes locales:', error);
+      }
+    }
+  };
+  
+  // Cargar memes al montar el componente
+  useEffect(() => {
+    loadMemes();
+    
+    // Escuchar el evento personalizado para actualizar los memes
+    const handleMemesUpdate = () => loadMemes();
+    window.addEventListener(MEME_UPDATE_EVENT, handleMemesUpdate);
+    
+    // Limpiar listener al desmontar
+    return () => {
+      window.removeEventListener(MEME_UPDATE_EVENT, handleMemesUpdate);
+    };
+  }, []);
+  
+  return allMemes;
+}
+
+export default sampleMemes; 

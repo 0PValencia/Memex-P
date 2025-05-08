@@ -1,32 +1,31 @@
 'use client'
 
 import { ReactNode } from 'react'
-import { configureChains, createConfig, WagmiConfig } from 'wagmi'
-import { base, baseSepolia } from 'wagmi/chains'
+import { WagmiConfig, createConfig } from 'wagmi'
+import { InjectedConnector } from 'wagmi/connectors/injected'
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
-import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
+import { createPublicClient, fallback, http } from 'viem'
+import { mainnet } from 'viem/chains'
 
-// Configurar cadenas y proveedores
-const { chains, publicClient } = configureChains(
-  [base, baseSepolia],
-  [
-    jsonRpcProvider({
-      rpc: (chain) => ({
-        http: chain.rpcUrls.default.http[0],
-      }),
-    }),
-  ]
-)
+// Cliente publicClient básico usando fallback
+const publicClient = createPublicClient({
+  chain: mainnet,
+  transport: fallback([
+    http('https://eth-mainnet.g.alchemy.com/v2/demo'),
+    http('https://cloudflare-eth.com')
+  ])
+})
 
-// Crear configuración de Wagmi
+// Configuración básica sin configureChains para evitar errores
 const config = createConfig({
-  autoConnect: true,
+  autoConnect: false,
   publicClient,
   connectors: [
+    new InjectedConnector(),
     new CoinbaseWalletConnector({
-      chains,
       options: {
         appName: 'Memex - Memes On-Chain',
+        chainId: 1, // Ethereum mainnet
       },
     }),
   ],

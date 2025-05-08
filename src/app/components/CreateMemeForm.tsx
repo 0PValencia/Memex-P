@@ -4,11 +4,16 @@ import { useState, useEffect, useCallback } from 'react'
 import { useAccount, useChainId, useContractWrite } from 'wagmi'
 import { create } from 'ipfs-http-client'
 import { MEMEX_CONTRACT_ABI, MEMEX_CONTRACT_ADDRESSES } from '@/utils/contracts'
+import Image from 'next/image'
+import { triggerMemesUpdate } from '../mocks/sampleMemes'
 
 // Configuración de IPFS con Infura (necesitarás tus propias claves en producción)
 const projectId = process.env.NEXT_PUBLIC_INFURA_PROJECT_ID || ''
 const projectSecret = process.env.NEXT_PUBLIC_INFURA_API_SECRET || ''
 const auth = 'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64')
+
+// Simulación de almacenamiento local
+const LOCAL_STORAGE_KEY = 'memex_uploaded_memes'
 
 // Hook para proveer la instancia de IPFS solo del lado del cliente
 function useClientSideIPFS() {
@@ -42,10 +47,11 @@ function useClientSideIPFS() {
   return ipfsInstance
 }
 
-export default function CreateMemeForm() {
+export default function CreateMemeForm({ onMemeCreated }: { onMemeCreated?: () => void }) {
   const { address, isConnected } = useAccount()
   const chainId = useChainId()
   const [file, setFile] = useState<File | null>(null)
+  const [preview, setPreview] = useState<string | null>(null)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [uploading, setUploading] = useState(false)
@@ -73,6 +79,58 @@ export default function CreateMemeForm() {
     }
   }, [contractError])
 
+  // Generar vista previa de la imagen
+  useEffect(() => {
+    if (!file) {
+      setPreview(null)
+      return
+    }
+
+    const objectUrl = URL.createObjectURL(file)
+    setPreview(objectUrl)
+
+    // Limpiar URL cuando ya no sea necesario
+    return () => URL.revokeObjectURL(objectUrl)
+  }, [file])
+
+  // Guardar el meme localmente para desarrollo
+  const saveMemeLocally = useCallback((memeData: any) => {
+    try {
+      // Recuperar memes existentes
+      let existingMemes = []
+      if (typeof window !== 'undefined') {
+        const savedMemes = localStorage.getItem(LOCAL_STORAGE_KEY)
+        existingMemes = savedMemes ? JSON.parse(savedMemes) : []
+      
+        // Agregar el nuevo meme
+        existingMemes.push({
+          ...memeData,
+          id: String(Date.now()), // Usar timestamp como ID temporal
+          currentBets: 0,
+          totalPot: 0,
+        })
+      
+        // Guardar la lista actualizada
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(existingMemes))
+      }
+      
+      return true
+    } catch (err) {
+      console.error('Error al guardar meme localmente:', err)
+      return false
+    }
+  }, [])
+
+  // Convertir File a base64
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = error => reject(error);
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
@@ -90,58 +148,73 @@ export default function CreateMemeForm() {
       setError('Por favor ingresa un título')
       return
     }
-    
-    if (!contractAddress) {
-      setError('El contrato no está disponible en esta red')
-      return
-    }
-
-    if (!ipfs) {
-      setError('El servicio IPFS no está disponible')
-      return
-    }
 
     try {
       setUploading(true)
       setError(null)
       setSuccess(null)
 
-      // Subir la imagen a IPFS
-      const fileData = await file.arrayBuffer()
-      const buffer = Buffer.from(fileData)
-      const imageResult = await ipfs.add(buffer)
-      const imageUrl = `ipfs://${imageResult.path}`
+      // Convertir imagen a base64 para almacenamiento local
+      const base64Image = await fileToBase64(file);
 
-      // Crear los metadatos del meme
-      const metadata = {
+      // Crear objeto con datos del meme
+      const memeData = {
         title,
         description,
-        image: imageUrl,
-        creator: address,
+        imageUrl: base64Image, // Guardamos la imagen como base64 en lugar de la URL temporal
+        creator: address || '0x0',
         createdAt: new Date().toISOString()
       }
 
-      // Subir los metadatos a IPFS
-      const metadataResult = await ipfs.add(JSON.stringify(metadata))
-      const tokenURI = `ipfs://${metadataResult.path}`
-
-      console.log('Meme metadata:', tokenURI)
+      // Guardar localmente (para desarrollo)
+      const saved = saveMemeLocally(memeData)
       
-      // En desarrollo, simular éxito en lugar de llamar al contrato
-      if (process.env.NODE_ENV === 'development') {
-        // Simular una transacción exitosa después de 2 segundos
-        setTimeout(() => {
-          setSuccess('¡Meme creado con éxito! (Simulación en desarrollo)')
-          setUploading(false)
-          setFile(null)
-          setTitle('')
-          setDescription('')
-        }, 2000)
+      if (saved) {
+        setSuccess('¡Meme creado con éxito! Se ha guardado localmente.')
+        setFile(null)
+        setPreview(null)
+        setTitle('')
+        setDescription('')
+        
+        // Disparar evento para actualizar los memes en todos los componentes
+        triggerMemesUpdate()
+        
+        // Notificar al componente padre sobre la creación exitosa
+        if (onMemeCreated) {
+          onMemeCreated()
+        }
       } else {
+        throw new Error('Error al guardar localmente')
+      }
+        
+      // En un entorno real, aquí iría el código para subir a IPFS y interactuar con el contrato
+      if (contractAddress && ipfs && process.env.NODE_ENV === 'production') {
+        // Subir la imagen a IPFS
+        const fileData = await file.arrayBuffer()
+        const buffer = Buffer.from(fileData)
+        const imageResult = await ipfs.add(buffer)
+        const imageUrl = `ipfs://${imageResult.path}`
+
+        // Crear los metadatos del meme
+        const metadata = {
+          title,
+          description,
+          image: imageUrl,
+          creator: address,
+          createdAt: new Date().toISOString()
+        }
+
+        // Subir los metadatos a IPFS
+        const metadataResult = await ipfs.add(JSON.stringify(metadata))
+        const tokenURI = `ipfs://${metadataResult.path}`
+
+        console.log('Meme metadata:', tokenURI)
+        
         // Llamar al contrato inteligente para mintear el meme
         write({ args: [tokenURI] })
-        setUploading(false)
       }
+      
+      setUploading(false)
     } catch (err) {
       console.error('Error al crear el meme:', err)
       setError('Error al subir el meme. Por favor intenta de nuevo.')
@@ -155,19 +228,19 @@ export default function CreateMemeForm() {
       setSuccess('¡Meme creado con éxito! Se ha minted como NFT.')
       // Resetear el formulario
       setFile(null)
+      setPreview(null)
       setTitle('')
       setDescription('')
+      
+      // Disparar evento para actualizar los memes en todos los componentes
+      triggerMemesUpdate()
+      
+      // Notificar al componente padre sobre la creación exitosa
+      if (onMemeCreated) {
+        onMemeCreated()
+      }
     }
-  }, [isSuccess, success])
-
-  // Para renderizaciones de prueba en el servidor, podemos devolver un formulario básico
-  if (!ipfs) {
-    return (
-      <div className="space-y-4 bg-white p-6 rounded-lg shadow animate-pulse">
-        <h2 className="text-2xl text-black font-bold mb-4">Cargando formulario...</h2>
-      </div>
-    )
-  }
+  }, [isSuccess, success, onMemeCreated])
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded-lg shadow">
@@ -198,47 +271,70 @@ export default function CreateMemeForm() {
         <input
           type="file"
           accept="image/*"
-          onChange={(e) => setFile(e.target.files?.[0] || null)}
-          className="w-full p-2 border rounded"
-          required
-          disabled={uploading || isLoading || !isConnected}
+          onChange={(e) => e.target.files && setFile(e.target.files[0])}
+          className="w-full border border-gray-300 rounded p-2 text-black"
+          disabled={uploading || !isConnected}
         />
+        
+        {preview && (
+          <div className="mt-4 relative h-48 w-full overflow-hidden rounded-lg border-2 border-blue-300">
+            <Image
+              src={preview}
+              alt="Vista previa"
+              fill
+              className="object-contain"
+            />
+          </div>
+        )}
       </div>
-
+      
       <div>
-        <label className="block text-sm font-medium text-black mb-2">
+        <label htmlFor="title" className="block text-sm font-medium text-black mb-2">
           Título
         </label>
         <input
           type="text"
+          id="title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full p-2 border rounded"
-          required
-          disabled={uploading || isLoading || !isConnected}
+          className="w-full border border-gray-300 rounded p-2 text-black"
+          placeholder="Un título creativo para tu meme"
+          disabled={uploading || !isConnected}
         />
       </div>
-
+      
       <div>
-        <label className="block text-sm font-medium text-black mb-2">
+        <label htmlFor="description" className="block text-sm font-medium text-black mb-2">
           Descripción
         </label>
         <textarea
+          id="description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="w-full p-2 border rounded"
+          className="w-full border border-gray-300 rounded p-2 text-black"
           rows={3}
-          disabled={uploading || isLoading || !isConnected}
+          placeholder="Una breve descripción de tu meme"
+          disabled={uploading || !isConnected}
         />
       </div>
-
-      <button
-        type="submit"
-        className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors disabled:bg-gray-400"
-        disabled={uploading || isLoading || !isConnected}
-      >
-        {uploading || isLoading ? 'Creando meme...' : 'Crear Meme'}
-      </button>
+      
+      <div>
+        <button
+          type="submit"
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          disabled={uploading || !isConnected}
+        >
+          {uploading ? (
+            <span className="flex items-center justify-center">
+              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Subiendo...
+            </span>
+          ) : "Crear Meme"}
+        </button>
+      </div>
     </form>
   )
 } 

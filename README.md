@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Memex - Memes en la Blockchain
 
-## Getting Started
+Memex es una plataforma social descentralizada que permite a los usuarios crear, compartir y apostar por memes en la blockchain. Si un meme se vuelve viral, los usuarios que apostaron reciben recompensas.
 
-First, run the development server:
+## Características
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- 🖼️ Crea memes como NFTs que se almacenan en IPFS
+- 💰 Apuesta por memes que crees que se volverán virales
+- 💸 Recibe recompensas cuando tus apuestas aciertan
+- 🔗 Todo integrado en la red Base para transacciones rápidas y de bajo costo
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tecnologías
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Frontend**: Next.js 15, React 19, TailwindCSS 4
+- **Web3**: Wagmi, Viem, Coinbase Wallet
+- **Almacenamiento**: IPFS a través de Infura
+- **Contratos**: Solidity con OpenZeppelin
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Requisitos
 
-## Learn More
+- Node.js 18+
+- Coinbase Wallet u otra wallet compatible
+- Conexión a la red Base
 
-To learn more about Next.js, take a look at the following resources:
+## Instalación
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Clona este repositorio
+   ```bash
+   git clone https://github.com/tu-usuario/memex.git
+   cd memex
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. Instala las dependencias
+   ```bash
+   npm install
+   ```
 
-## Deploy on Vercel
+3. Configura las variables de entorno
+   Crea un archivo `.env.local` con las siguientes variables:
+   ```
+   NEXT_PUBLIC_INFURA_PROJECT_ID=tu-id-de-proyecto
+   NEXT_PUBLIC_INFURA_API_SECRET=tu-clave-secreta
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. Inicia el servidor de desarrollo
+   ```bash
+   npm run dev
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+5. Abre [http://localhost:3000](http://localhost:3000) en tu navegador
+
+## Estructura del Proyecto
+
+- `/src/app` - Componentes de la aplicación
+- `/src/contracts` - Contratos inteligentes
+- `/src/utils` - Utilidades y configuración de contratos
+- `/public` - Archivos estáticos
+
+## Cómo Funciona
+
+1. Los usuarios conectan su wallet de Coinbase
+2. Crean memes que se almacenan en IPFS y se mintean como NFTs
+3. Otros usuarios pueden apostar por memes que creen que se volverán virales
+4. Cuando un meme se marca como viral, los apostadores y el creador reciben recompensas
+
+## Licencia
+
+Este proyecto está licenciado bajo la Licencia MIT. Ver archivo `LICENSE` para más detalles.

@@ -1,36 +1,65 @@
 'use client'
 
-import { ReactNode } from 'react'
-import { WagmiConfig, createConfig } from 'wagmi'
-import { InjectedConnector } from 'wagmi/connectors/injected'
-import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
-import { createPublicClient, fallback, http } from 'viem'
-import { mainnet } from 'viem/chains'
+import { ReactNode, useEffect, useState } from 'react'
+import { base, baseSepolia } from 'viem/chains';
+import { configureChains, createConfig, WagmiConfig } from 'wagmi';
+import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
+import { InjectedConnector } from 'wagmi/connectors/injected';
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
+import { publicProvider } from 'wagmi/providers/public';
 
-// Cliente publicClient básico usando fallback
-const publicClient = createPublicClient({
-  chain: mainnet,
-  transport: fallback([
-    http('https://eth-mainnet.g.alchemy.com/v2/demo'),
-    http('https://cloudflare-eth.com')
-  ])
-})
+// Configuración para wagmi v1.4.13 incluyendo Base Mainnet y Sepolia
+const { chains, publicClient, webSocketPublicClient } = configureChains(
+  [baseSepolia, base], // Prioridad a Sepolia para pruebas, luego Mainnet
+  [
+    // Base Sepolia Testnet
+    jsonRpcProvider({
+      rpc: () => ({ 
+        http: 'https://sepolia.base.org',
+      }),
+    }),
+    // Base Mainnet
+    jsonRpcProvider({
+      rpc: () => ({ 
+        http: 'https://mainnet.base.org',
+      }),
+    }),
+    publicProvider()
+  ]
+);
 
-// Configuración básica sin configureChains para evitar errores
+// Cliente de wagmi para v1.4.13
 const config = createConfig({
-  autoConnect: false,
-  publicClient,
+  autoConnect: true,
   connectors: [
-    new InjectedConnector(),
     new CoinbaseWalletConnector({
+      chains,
       options: {
         appName: 'Memex - Memes On-Chain',
-        chainId: 1, // Ethereum mainnet
-      },
+      }
+    }),
+    new InjectedConnector({
+      chains,
     }),
   ],
-})
+  publicClient,
+  webSocketPublicClient,
+});
 
+// Componente proveedor con soporte para hidratación
 export function WagmiProvider({ children }: { children: ReactNode }) {
-  return <WagmiConfig config={config}>{children}</WagmiConfig>
+  // Estado para controlar la hidratación del lado del cliente
+  const [mounted, setMounted] = useState(false);
+  
+  // Asegurar que el componente solo se monte en el cliente
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Evitar problemas de hidratación renderizando solo después de montado
+  return (
+    <WagmiConfig config={config}>
+      {mounted ? children : null}
+    </WagmiConfig>
+  );
 } 

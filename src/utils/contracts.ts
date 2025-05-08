@@ -1,12 +1,15 @@
 import { useContractWrite, type Address } from 'wagmi'
 import { parseEther } from 'viem'
+import { base, baseSepolia } from 'viem/chains'
 
 // Direcciones del contrato Memex por red
 export const MEMEX_CONTRACT_ADDRESSES: Record<number, Address> = {
   // Ethereum Mainnet
   1: '0xMemexContractAddressEthereum' as Address,
   // Base Mainnet
-  8453: '0xMemexContractAddressBase' as Address,
+  [base.id]: '0x8bD92FbCC798Ef33aF0A346bFCb279F15F5964A8' as Address,
+  // Base Sepolia (testnet)
+  [baseSepolia.id]: '0x8bD92FbCC798Ef33aF0A346bFCb279F15F5964A8' as Address,
   // Optimism
   10: '0xMemexContractAddressOptimism' as Address,
   // Arbitrum One
@@ -18,23 +21,62 @@ export const MEMEX_CONTRACT_ADDRESSES: Record<number, Address> = {
 // ABI del contrato Memex
 export const MEMEX_CONTRACT_ABI = [
   // Eventos
-  'event MemeCreated(uint256 indexed tokenId, address indexed creator, string tokenURI)',
-  'event BetPlaced(uint256 indexed tokenId, address indexed better, uint256 amount, uint256 newTotalPot)',
-  'event MemeWentViral(uint256 indexed tokenId, uint256 totalPot, uint256 viralityScore)',
-  'event RewardsClaimed(uint256 indexed tokenId, address indexed claimer, uint256 amount, bool isCreator)',
-  'event ViralityScoreUpdated(uint256 indexed tokenId, uint256 newScore)',
+  {
+    name: 'MemeCreated',
+    type: 'event',
+    inputs: [
+      { indexed: true, name: 'tokenId', type: 'uint256' },
+      { indexed: true, name: 'creator', type: 'address' },
+      { indexed: false, name: 'tokenURI', type: 'string' }
+    ]
+  },
+  {
+    name: 'BetPlaced',
+    type: 'event',
+    inputs: [
+      { indexed: true, name: 'tokenId', type: 'uint256' },
+      { indexed: true, name: 'better', type: 'address' },
+      { indexed: false, name: 'amount', type: 'uint256' },
+      { indexed: false, name: 'newTotalPot', type: 'uint256' }
+    ]
+  },
   
   // Funciones de vista
-  'function getMemeInfo(uint256 tokenId) view returns (tuple(uint256 id, address creator, uint256 totalBets, uint256 totalPot, bool isActive, uint256 createdAt, uint256 viralityScore, uint256 lastUpdateTime))',
-  'function getBetAmount(uint256 tokenId, address user) view returns (uint256)',
-  'function getBetHistory(uint256 tokenId) view returns (tuple(address better, uint256 amount, uint256 timestamp)[])',
-  'function getTopViralMemes(uint256 limit) view returns (uint256[])',
+  {
+    name: 'getMemeInfo',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [{ name: 'tokenId', type: 'uint256' }],
+    outputs: [{
+      type: 'tuple',
+      components: [
+        { name: 'id', type: 'uint256' },
+        { name: 'creator', type: 'address' },
+        { name: 'totalBets', type: 'uint256' },
+        { name: 'totalPot', type: 'uint256' },
+        { name: 'isActive', type: 'bool' },
+        { name: 'createdAt', type: 'uint256' },
+        { name: 'viralityScore', type: 'uint256' },
+        { name: 'lastUpdateTime', type: 'uint256' }
+      ]
+    }]
+  },
   
   // Funciones de escritura
-  'function createMeme(string memory tokenURI) returns (uint256)',
-  'function betOnMeme(uint256 tokenId) payable',
-  'function claimCreatorRewards(uint256 tokenId)',
-  'function claimBetterRewards(uint256 tokenId)'
+  {
+    name: 'createMeme',
+    type: 'function',
+    stateMutability: 'nonpayable',
+    inputs: [{ name: 'tokenURI', type: 'string' }],
+    outputs: [{ name: '', type: 'uint256' }]
+  },
+  {
+    name: 'betOnMeme',
+    type: 'function',
+    stateMutability: 'payable',
+    inputs: [{ name: 'tokenId', type: 'uint256' }],
+    outputs: []
+  }
 ];
 
 /**

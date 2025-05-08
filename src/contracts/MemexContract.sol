@@ -3,15 +3,15 @@ pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 
 /**
  * @title MemexContract
  * @dev Contrato para la plataforma Memex que permite crear y apostar por memes
  */
 contract MemexContract is ERC721URIStorage, Ownable {
-    using Counters for Counters.Counter;
-    Counters.Counter private _tokenIds;
+    // Usamos un contador simple para los IDs de tokens
+    uint256 private _nextTokenId;
 
     // Estructura para almacenar información de cada meme
     struct Meme {
@@ -44,8 +44,7 @@ contract MemexContract is ERC721URIStorage, Ownable {
      * @return tokenId ID del nuevo meme creado
      */
     function createMeme(string memory tokenURI) public returns (uint256) {
-        _tokenIds.increment();
-        uint256 newItemId = _tokenIds.current();
+        uint256 newItemId = _nextTokenId++;
         
         _mint(msg.sender, newItemId);
         _setTokenURI(newItemId, tokenURI);

@@ -1,13 +1,13 @@
 // Direcciones de contratos por red
-import { base } from 'wagmi/chains'
+import { base, baseSepolia } from 'wagmi/chains'
 
 export const MEMEX_CONTRACT_ADDRESSES: Record<number, string> = {
   // Base mainnet
-  [base.id]: '0x0000000000000000000000000000000000000000', // Actualizar cuando se despliegue
+  [base.id]: '0x71828A166D00f0291F6c87383ed32165d4F2fF35', // Dirección temporal para simular
   
   // Para testnet o localhost, puedes agregar más direcciones
   // Ejemplo para Base Sepolia
-  84532: '0x0000000000000000000000000000000000000000',
+  [baseSepolia.id]: '0x71828A166D00f0291F6c87383ed32165d4F2fF35',
 }
 
 // ABI simplificado para nuestro contrato

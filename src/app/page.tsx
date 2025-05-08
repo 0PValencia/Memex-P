@@ -1,13 +1,9 @@
-import { Metadata } from 'next'
+'use client'
+
 import CreateMemeForm from './components/CreateMemeForm'
 import MemeCard from './components/MemeCard'
 import ConnectWallet from './components/ConnectWallet'
 import { sampleMemes } from './mocks/sampleMemes'
-
-export const metadata: Metadata = {
-  title: 'Memex - Memes On-Chain',
-  description: 'Crea, comparte y apuesta por memes en la blockchain',
-}
 
 export default function Home() {
   return (

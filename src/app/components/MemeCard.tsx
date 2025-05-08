@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { useAccount, useChainId, useContractWrite } from 'wagmi'
 import { parseEther } from 'viem'
@@ -30,6 +30,15 @@ export default function MemeCard({
   const [betAmount, setBetAmount] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
+  const [imageError, setImageError] = useState(false)
+  
+  // Estado para controlar la renderización del lado del cliente
+  const [mounted, setMounted] = useState(false)
+  
+  // Solo ejecutar después del montaje del componente (en el cliente)
+  useEffect(() => {
+    setMounted(true)
+  }, [])
   
   // Obtener la dirección del contrato según la cadena actual
   const contractAddress = chainId ? MEMEX_CONTRACT_ADDRESSES[chainId] : null
@@ -72,21 +81,38 @@ export default function MemeCard({
     }
   }
 
-  // Efecto para mostrar mensaje de éxito después de la transacción
-  if (isSuccess && !success) {
-    setSuccess(`¡Apuesta de ${betAmount} ETH realizada con éxito!`)
-    setBetAmount('')
+  const handleImageError = () => {
+    setImageError(true)
   }
+
+  // Actualizar el estado en un efecto para evitar cambios de estado durante la renderización
+  useEffect(() => {
+    if (isSuccess && !success) {
+      setSuccess(`¡Apuesta de ${betAmount} ETH realizada con éxito!`)
+      setBetAmount('')
+    }
+  }, [isSuccess, success, betAmount])
 
   return (
     <div className="bg-white rounded-lg shadow overflow-hidden">
       <div className="relative h-64">
-        <Image
-          src={imageUrl}
-          alt={title}
-          fill
-          className="object-cover"
-        />
+        {!imageError ? (
+          <Image
+            src={imageUrl}
+            alt={title}
+            fill
+            priority
+            className="object-cover"
+            onError={handleImageError}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-gray-200 text-black">
+            <div className="text-center">
+              <div className="text-2xl font-bold mb-2">{title}</div>
+              <div className="text-sm">Imagen no disponible</div>
+            </div>
+          </div>
+        )}
       </div>
       
       <div className="p-4">
@@ -116,31 +142,40 @@ export default function MemeCard({
           </div>
         )}
 
-        {!isConnected && (
-          <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4">
-            Conecta tu wallet para poder apostar
+        {/* Controlar la visualización de los componentes dependiendo del estado de montaje */}
+        {mounted ? (
+          <>
+            {!isConnected && (
+              <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4">
+                Conecta tu wallet para poder apostar
+              </div>
+            )}
+
+            <div className="flex gap-2">
+              <input
+                type="number"
+                value={betAmount}
+                onChange={(e) => setBetAmount(e.target.value)}
+                placeholder="Cantidad en ETH"
+                className="flex-1 p-2 border rounded"
+                min="0"
+                step="0.01"
+                disabled={isLoading || !isConnected}
+              />
+              <button
+                onClick={handleBet}
+                className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition-colors disabled:bg-gray-400"
+                disabled={isLoading || !isConnected}
+              >
+                {isLoading ? 'Apostando...' : 'Apostar'}
+              </button>
+            </div>
+          </>
+        ) : (
+          <div className="p-2 bg-gray-100 rounded animate-pulse">
+            <div className="h-10 bg-gray-200 rounded"></div>
           </div>
         )}
-
-        <div className="flex gap-2">
-          <input
-            type="number"
-            value={betAmount}
-            onChange={(e) => setBetAmount(e.target.value)}
-            placeholder="Cantidad en ETH"
-            className="flex-1 p-2 border rounded"
-            min="0"
-            step="0.01"
-            disabled={isLoading || !isConnected}
-          />
-          <button
-            onClick={handleBet}
-            className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition-colors disabled:bg-gray-400"
-            disabled={isLoading || !isConnected}
-          >
-            {isLoading ? 'Apostando...' : 'Apostar'}
-          </button>
-        </div>
       </div>
     </div>
   )

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useAccount, useChainId, useContractWrite } from 'wagmi'
 import { create } from 'ipfs-http-client'
 import { MEMEX_CONTRACT_ABI, MEMEX_CONTRACT_ADDRESSES } from '@/utils/contracts'
@@ -10,28 +10,36 @@ const projectId = process.env.NEXT_PUBLIC_INFURA_PROJECT_ID || ''
 const projectSecret = process.env.NEXT_PUBLIC_INFURA_API_SECRET || ''
 const auth = 'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64')
 
-// Si no hay claves configuradas, usamos una función de simulación
-const useIPFS = () => {
-  if (projectId && projectSecret) {
-    return create({
-      host: 'ipfs.infura.io',
-      port: 5001,
-      protocol: 'https',
-      headers: {
-        authorization: auth
-      }
-    })
-  } else {
-    // Función de simulación para desarrollo
-    return {
-      add: async (content: any) => {
-        console.log('Simulando carga a IPFS:', content)
-        // Generar un CID simulado
-        const cid = 'Qm' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
-        return { path: cid }
-      }
+// Hook para proveer la instancia de IPFS solo del lado del cliente
+function useClientSideIPFS() {
+  const [ipfsInstance, setIpfsInstance] = useState<any>(null)
+  
+  useEffect(() => {
+    // Esta función solo se ejecuta en el cliente
+    if (projectId && projectSecret) {
+      const ipfs = create({
+        host: 'ipfs.infura.io',
+        port: 5001,
+        protocol: 'https',
+        headers: {
+          authorization: auth
+        }
+      })
+      setIpfsInstance(ipfs)
+    } else {
+      // Función de simulación para desarrollo
+      setIpfsInstance({
+        add: async (content: any) => {
+          console.log('Simulando carga a IPFS:', content)
+          // Generar un CID simulado
+          const cid = 'Qm' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+          return { path: cid }
+        }
+      })
     }
-  }
+  }, [])
+  
+  return ipfsInstance
 }
 
 export default function CreateMemeForm() {
@@ -48,14 +56,22 @@ export default function CreateMemeForm() {
   const contractAddress = chainId ? MEMEX_CONTRACT_ADDRESSES[chainId] : null
   
   // Preparar la llamada al contrato
-  const { write, isLoading, isSuccess } = useContractWrite({
+  const { write, isLoading, isSuccess, error: contractError } = useContractWrite({
     address: contractAddress as `0x${string}`,
     abi: MEMEX_CONTRACT_ABI,
     functionName: 'createMeme',
   })
   
-  // Inicializar IPFS
-  const ipfs = useIPFS()
+  // Inicializar IPFS del lado del cliente
+  const ipfs = useClientSideIPFS()
+
+  // Detectar errores del contrato
+  useEffect(() => {
+    if (contractError) {
+      console.error('Error del contrato:', contractError)
+      setError(`Error del contrato: ${contractError.message}`)
+    }
+  }, [contractError])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -77,6 +93,11 @@ export default function CreateMemeForm() {
     
     if (!contractAddress) {
       setError('El contrato no está disponible en esta red')
+      return
+    }
+
+    if (!ipfs) {
+      setError('El servicio IPFS no está disponible')
       return
     }
 
@@ -106,10 +127,21 @@ export default function CreateMemeForm() {
 
       console.log('Meme metadata:', tokenURI)
       
-      // Llamar al contrato inteligente para mintear el meme
-      write({ args: [tokenURI] })
-      
-      setUploading(false)
+      // En desarrollo, simular éxito en lugar de llamar al contrato
+      if (process.env.NODE_ENV === 'development') {
+        // Simular una transacción exitosa después de 2 segundos
+        setTimeout(() => {
+          setSuccess('¡Meme creado con éxito! (Simulación en desarrollo)')
+          setUploading(false)
+          setFile(null)
+          setTitle('')
+          setDescription('')
+        }, 2000)
+      } else {
+        // Llamar al contrato inteligente para mintear el meme
+        write({ args: [tokenURI] })
+        setUploading(false)
+      }
     } catch (err) {
       console.error('Error al crear el meme:', err)
       setError('Error al subir el meme. Por favor intenta de nuevo.')
@@ -118,12 +150,23 @@ export default function CreateMemeForm() {
   }
   
   // Cuando la transacción es exitosa
-  if (isSuccess && !success) {
-    setSuccess('¡Meme creado con éxito! Se ha minted como NFT.')
-    // Resetear el formulario
-    setFile(null)
-    setTitle('')
-    setDescription('')
+  useEffect(() => {
+    if (isSuccess && !success) {
+      setSuccess('¡Meme creado con éxito! Se ha minted como NFT.')
+      // Resetear el formulario
+      setFile(null)
+      setTitle('')
+      setDescription('')
+    }
+  }, [isSuccess, success])
+
+  // Para renderizaciones de prueba en el servidor, podemos devolver un formulario básico
+  if (!ipfs) {
+    return (
+      <div className="space-y-4 bg-white p-6 rounded-lg shadow animate-pulse">
+        <h2 className="text-2xl text-black font-bold mb-4">Cargando formulario...</h2>
+      </div>
+    )
   }
 
   return (

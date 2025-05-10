@@ -19,8 +19,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es">
-      <body className={inter.className}>
+    <html lang="es" className="light">
+      <body className={`${inter.className} bg-white text-black`}>
         <ThemeProvider>
           <WagmiProvider>
             <OnchainKitContextProvider>

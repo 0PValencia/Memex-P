@@ -1,9 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { useAccount, useContractWrite, useWaitForTransaction } from 'wagmi'
+import { useAccount } from 'wagmi'
 import { parseEther } from 'viem'
-import { abi, contractAddress } from '@/contracts/abi'
 
 export default function CreateQuoteForm() {
   const { address, isConnected } = useAccount()
@@ -13,34 +12,6 @@ export default function CreateQuoteForm() {
   const [description, setDescription] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
-  
-  // Preparar la llamada al contrato para crear una cotización
-  const { 
-    data: createData, 
-    write: createQuote,
-    isLoading: isCreating,
-    error: createError 
-  } = useContractWrite({
-    address: contractAddress as `0x${string}`,
-    abi,
-    functionName: 'createQuote',
-  })
-
-  // Esperar la transacción
-  const { isLoading: isWaiting, isSuccess } = useWaitForTransaction({
-    hash: createData?.hash,
-    onSuccess: () => {
-      setSuccess(`¡Cotización creada con éxito! ID: ${createData?.hash}`)
-      setClientAddress('')
-      setAmount('')
-      setDeadline('')
-      setDescription('')
-      console.log(`Cotización creada con ID: ${createData?.hash}`)
-    },
-    onError: () => {
-      setError('Error al procesar la transacción. Inténtalo de nuevo.')
-    }
-  })
 
   // Convertir días a timestamp futuro
   const calculateDeadlineTimestamp = (daysFromNow: number): bigint => {
@@ -89,15 +60,9 @@ export default function CreateQuoteForm() {
       // Calcular el timestamp del plazo
       const deadlineTimestamp = calculateDeadlineTimestamp(deadlineDays)
 
-      // Llamar al contrato
-      createQuote?.({
-        args: [
-          clientAddress as `0x${string}`,
-          parseEther(amount),
-          deadlineTimestamp,
-          description
-        ],
-      })
+      // Aquí iría la lógica para crear la cotización en el contrato
+      // Actualmente deshabilitado
+      setSuccess('Cotización simulada creada correctamente (sin contrato)')
     } catch (err) {
       setError('Ocurrió un error inesperado. Por favor, inténtalo de nuevo.')
       console.error(err)
@@ -137,7 +102,7 @@ export default function CreateQuoteForm() {
           placeholder="0x..."
           value={clientAddress}
           onChange={(e) => setClientAddress(e.target.value)}
-          disabled={isCreating || isWaiting}
+          disabled={!isConnected}
         />
       </div>
 
@@ -152,7 +117,7 @@ export default function CreateQuoteForm() {
           placeholder="0.1"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
-          disabled={isCreating || isWaiting}
+          disabled={!isConnected}
         />
       </div>
 
@@ -167,7 +132,7 @@ export default function CreateQuoteForm() {
           placeholder="14"
           value={deadline}
           onChange={(e) => setDeadline(e.target.value)}
-          disabled={isCreating || isWaiting}
+          disabled={!isConnected}
         />
       </div>
 
@@ -182,16 +147,16 @@ export default function CreateQuoteForm() {
           rows={4}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          disabled={isCreating || isWaiting}
+          disabled={!isConnected}
         />
       </div>
 
       <button
         type="submit"
         className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors disabled:bg-blue-400"
-        disabled={isCreating || isWaiting || !isConnected}
+        disabled={!isConnected}
       >
-        {isCreating || isWaiting ? 'Procesando...' : 'Crear Cotización'}
+        Crear Cotización
       </button>
     </form>
   )

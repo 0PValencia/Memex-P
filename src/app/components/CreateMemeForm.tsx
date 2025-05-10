@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useAccount, useNetwork, useContractWrite } from 'wagmi'
-import { create } from 'ipfs-http-client'
 import { MEMEX_CONTRACT_ABI, MEMEX_CONTRACT_ADDRESSES } from '@/utils/contracts'
 import Image from 'next/image'
 import { triggerMemesUpdate } from '../mocks/sampleMemes'
@@ -22,16 +21,29 @@ function useClientSideIPFS() {
   
   useEffect(() => {
     // Esta función solo se ejecuta en el cliente
-    if (projectId && projectSecret) {
-      const ipfs = create({
-        host: 'ipfs.infura.io',
-        port: 5001,
-        protocol: 'https',
-        headers: {
-          authorization: auth
-        }
+    if (typeof window !== "undefined" && projectId && projectSecret) {
+      import('ipfs-http-client').then(({ create }) => {
+        const ipfs = create({
+          host: 'ipfs.infura.io',
+          port: 5001,
+          protocol: 'https',
+          headers: {
+            authorization: auth
+          }
+        })
+        setIpfsInstance(ipfs)
+      }).catch(err => {
+        console.error('Error al cargar ipfs-http-client:', err)
+        // Función de simulación para desarrollo
+        setIpfsInstance({
+          add: async (content: any) => {
+            console.log('Simulando carga a IPFS:', content)
+            // Generar un CID simulado
+            const cid = 'Qm' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+            return { path: cid }
+          }
+        })
       })
-      setIpfsInstance(ipfs)
     } else {
       // Función de simulación para desarrollo
       setIpfsInstance({

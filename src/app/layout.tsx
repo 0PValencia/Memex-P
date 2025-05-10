@@ -19,8 +19,31 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className="light">
-      <body className={`${inter.className} bg-white text-black`}>
+    <html lang="es">
+      <head>
+        <style>
+          {`
+            body {
+              background-color: white !important;
+              color: black !important;
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            }
+
+            nav {
+              background-color: white !important;
+              border-bottom: 1px solid #e5e7eb !important;
+              box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05) !important;
+              padding: 0.75rem 1rem !important;
+              position: fixed !important;
+              top: 0 !important;
+              left: 0 !important;
+              right: 0 !important;
+              z-index: 50 !important;
+            }
+          `}
+        </style>
+      </head>
+      <body>
         <ThemeProvider>
           <WagmiProvider>
             <OnchainKitContextProvider>
@@ -28,8 +51,8 @@ export default function RootLayout({
               <div className="pt-20 pb-12 px-4 md:px-6">
                 {children}
               </div>
-              <footer className="mt-auto py-6 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
-                <div className="max-w-6xl mx-auto px-4 text-center text-sm text-gray-500 dark:text-gray-400">
+              <footer className="mt-auto py-6 bg-white border-t border-gray-200">
+                <div className="max-w-6xl mx-auto px-4 text-center text-sm text-gray-500">
                   <p>Memex - Plataforma social de memes en blockchain Base</p>
                 </div>
               </footer>

@@ -1,341 +1,149 @@
-/* postcss-import */
 @tailwind base;
-/* postcss-import */
 @tailwind components;
-/* postcss-import */
 @tailwind utilities;
 
-/* Agrego comentarios especiales para ignorar advertencias del linter */
-/* tailwindcss (ignorar) */
-/* apply (ignorar) */
-
-:root {
-  --background: #f8f9fa;
-  --foreground: #171717;
-  --color-background: #f8f9fa;
-  --color-foreground: #171717;
-  --color-primary: #3b82f6;
-  --color-primary-hover: #2563eb;
-  --color-secondary: #10b981;
-  --color-secondary-hover: #059669;
-  --color-accent: #8b5cf6;
-  --color-accent-hover: #7c3aed;
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --radius: 0.5rem;
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+/* Estilos base forzados para arreglar problemas de renderizado */
+html, body {
+  background-color: white !important;
+  color: black !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
-/* Desactivamos el cambio automático a modo oscuro */
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* Mantenemos los colores claros incluso en modo oscuro */
-    --background: #f8f9fa;
-    --foreground: #171717;
-  }
+/* Estilos de navegación */
+nav {
+  background-color: white !important;
+  border-bottom: 1px solid #e5e7eb !important;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05) !important;
+  padding: 0.75rem 1rem !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 50 !important;
 }
 
-body {
-  background-color: #f8f9fa;
-  color: #171717;
-  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+a {
+  color: #3b82f6 !important;
+  text-decoration: none !important;
 }
 
-/* Estilos para textos en componentes con fondo blanco */
-.bg-white, .bg-gray-50, .bg-gray-100, .bg-blue-50 {
-  color: #000000;
+a:hover {
+  text-decoration: underline !important;
 }
 
-/* Excepciones para botones y elementos con color específico */
-.bg-green-600, .bg-blue-600 {
-  color: white;
+/* Botones */
+button, .button {
+  display: inline-block !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 0.375rem !important;
+  font-weight: 500 !important;
+  text-align: center !important;
+  transition: all 0.15s ease-in-out !important;
+}
+
+button.primary, .button.primary {
+  background-color: #3b82f6 !important;
+  color: white !important;
+  border: none !important;
+}
+
+button.primary:hover, .button.primary:hover {
+  background-color: #2563eb !important;
+}
+
+/* Cards */
+.card {
+  background-color: white !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06) !important;
+  overflow: hidden !important;
+  margin-bottom: 1rem !important;
+}
+
+/* Contenedores */
+.container {
+  max-width: 1280px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+
+/* Textos */
+h1 {
+  font-size: 2.25rem !important;
+  font-weight: 700 !important;
+  line-height: 2.5rem !important;
+  margin-bottom: 1rem !important;
+}
+
+h2 {
+  font-size: 1.875rem !important;
+  font-weight: 700 !important;
+  line-height: 2.25rem !important;
+  margin-bottom: 0.75rem !important;
+}
+
+h3 {
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
+  line-height: 2rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+p {
+  margin-bottom: 1rem !important;
+  line-height: 1.625 !important;
+}
+
+/* Utilidades */
+.flex {
+  display: flex !important;
+}
+
+.justify-between {
+  justify-content: space-between !important;
+}
+
+.items-center {
+  align-items: center !important;
+}
+
+.p-4 {
+  padding: 1rem !important;
+}
+
+.my-4 {
+  margin-top: 1rem !important;
+  margin-bottom: 1rem !important;
+}
+
+.mt-20 {
+  margin-top: 5rem !important;
 }
 
 .text-white {
   color: white !important;
 }
 
-button.bg-green-600, button.bg-blue-600 {
-  color: white;
-  transition: all 0.2s ease;
+.bg-blue-600 {
+  background-color: #2563eb !important;
 }
 
-/* Estilos para los enlaces */
-a {
-  color: var(--color-primary);
-  transition: all 0.2s ease;
-}
-
-a:hover {
-  color: var(--color-primary-hover);
-  text-decoration: underline;
-}
-
-/* Estilos mejorados para imágenes */
-.h-64 {
-  height: 16rem;
-  min-height: 16rem;
-}
-
-/* Forzar modo claro para toda la aplicación */
-:root, html, body {
-  color-scheme: light;
-}
-
-/* Mejoras visuales para los componentes principales */
 .rounded-lg {
-  border-radius: var(--radius);
+  border-radius: 0.5rem !important;
 }
 
 .shadow {
-  box-shadow: var(--shadow);
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06) !important;
 }
 
-.shadow-lg {
-  box-shadow: var(--shadow-lg);
-}
-
-.transition {
-  transition: all 0.2s ease;
-}
-
-/* Estilos para cards */
-.card {
-  @apply bg-white rounded-lg shadow overflow-hidden transition hover:shadow-md;
-}
-
-/* Estilos para botones */
-.btn {
-  @apply px-4 py-2 rounded-lg font-medium transition;
-}
-
-.btn-primary {
-  @apply bg-blue-600 text-white hover:bg-blue-700;
-}
-
-.btn-secondary {
-  @apply bg-green-600 text-white hover:bg-green-700;
-}
-
-.btn-outline {
-  @apply bg-white border border-gray-300 text-gray-700 hover:bg-gray-50;
-}
-
-/* Animaciones */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.animate-fadeIn {
-  animation: fadeIn 0.5s ease-in-out;
-}
-
-/* Mejoras para secciones */
-section {
-  @apply py-16;
-}
-
-/* Estilos específicos para Memex */
-.meme-card {
-  @apply bg-white rounded-lg shadow overflow-hidden transform transition hover:-translate-y-1 hover:shadow-lg;
-}
-
-.hero-gradient {
-  @apply bg-gradient-to-r from-blue-700 to-indigo-800 text-white;
-  position: relative;
-}
-
-.hero-gradient::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-  opacity: 0.1;
-}
-
-.viral-badge {
-  @apply absolute -bottom-4 -left-4 bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium shadow;
-  transition: all 0.3s ease;
-}
-
-.icon-container {
-  @apply bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4;
-  transition: all 0.3s ease;
-}
-
-.icon-number {
-  @apply text-blue-700 text-2xl font-bold;
-}
-
-/* Personalización del navbar */
-.navbar {
-  @apply fixed top-0 left-0 w-full z-50 bg-white/90 backdrop-blur-sm shadow py-3;
-}
-
-/* Efecto de gradiente para texto */
-.text-gradient-primary {
-  background: linear-gradient(to right, #3b82f6, #8b5cf6);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  display: inline-block;
-}
-
-/* Efectos para imágenes */
-.img-hover-zoom {
-  overflow: hidden;
-}
-
-.img-hover-zoom img {
-  transition: transform 0.5s ease;
-}
-
-.img-hover-zoom:hover img {
-  transform: scale(1.05);
-}
-
-/* Notificaciones */
-.notification {
-  @apply px-4 py-3 rounded-lg shadow-md my-4 border-l-4;
-}
-
-.notification-success {
-  @apply bg-green-50 border-green-500 text-green-700;
-}
-
-.notification-error {
-  @apply bg-red-50 border-red-500 text-red-700;
-}
-
-.notification-warning {
-  @apply bg-yellow-50 border-yellow-500 text-yellow-700;
-}
-
-@keyframes slideIn {
-  from {
-    transform: translateY(20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-.slide-in {
-  animation: slideIn 0.3s ease-out forwards;
-}
-
-.hover-card-effect {
-  transition: all 0.3s ease;
-}
-
-.hover-card-effect:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-md);
-}
-
+/* Footer */
 footer {
-  @apply py-8 border-t border-gray-200;
-  position: relative;
-}
-
-footer::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(to right, rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.3), rgba(59, 130, 246, 0));
-}
-
-/* Estilos de scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #c5c5c5;
-  border-radius: 10px;
-  transition: background 0.3s;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
-}
-
-/* Estilos personalizados para el botón de wallet */
-.wallet-btn {
-  @apply py-3 px-6 bg-blue-600 text-white font-medium rounded-lg transition-all shadow;
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
-}
-
-.wallet-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s;
-  z-index: -1;
-}
-
-.wallet-btn:hover::before {
-  left: 100%;
-}
-
-.wallet-btn:hover {
-  @apply bg-blue-700 shadow-md transform -translate-y-0.5;
-}
-
-.wallet-btn:active {
-  @apply transform scale-[0.98] translate-y-0;
-}
-
-.wallet-container {
-  @apply my-8 p-6 bg-white rounded-lg shadow-md;
-  position: relative;
-}
-
-/* Estilo mejorado para el área de login/conectar wallet */
-.connect-section {
-  @apply mt-8 mb-12 p-8 bg-white rounded-xl shadow-lg border border-gray-100;
-  position: relative;
-  overflow: hidden;
-}
-
-.connect-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 150px;
-  height: 150px;
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0) 70%);
-  border-radius: 50%;
-  transform: translate(30%, -30%);
+  background-color: white !important;
+  border-top: 1px solid #e5e7eb !important;
+  padding: 1.5rem 0 !important;
+  text-align: center !important;
+  color: #6b7280 !important;
+  font-size: 0.875rem !important;
 }

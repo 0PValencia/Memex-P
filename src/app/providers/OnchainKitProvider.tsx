@@ -18,7 +18,15 @@ export function OnchainKitContextProvider({ children }: { children: ReactNode })
     <OnchainKitProvider
       chain={chainForOnchainKit}
       projectId={process.env.NEXT_PUBLIC_ACCOUNT_KIT_PROJECT_ID || ''}
-      apiKey={process.env.NEXT_PUBLIC_ONCHAINKIT_API_KEY || ''}
+      apiKey={process.env.NEXT_PUBLIC_CDP_CLIENT_API_KEY || ''}
+      config={{
+        appearance: {
+          mode: 'light',
+          theme: 'memex',
+          name: 'Memex',
+          logo: process.env.NEXT_PUBLIC_ICON_URL || '/images/logo.svg',
+        },
+      }}
     >
       {children}
     </OnchainKitProvider>

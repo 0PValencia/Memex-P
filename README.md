@@ -26,7 +26,7 @@ Memex es una plataforma social descentralizada que permite a los usuarios crear,
 
 1. Clona este repositorio
    ```bash
-   git clone https://github.com/tu-usuario/memex.git
+   git clone https://github.com/Tu_usuario/memex.git
    cd memex
    ```
 

@@ -1,0 +1,15 @@
+{
+  "accountAssociation": {
+    "header": "REPLACE_WITH_YOUR_FARCASTER_HEADER",
+    "payload": "REPLACE_WITH_YOUR_FARCASTER_PAYLOAD",
+    "signature": "REPLACE_WITH_YOUR_FARCASTER_SIGNATURE"
+  },
+  "frame": {
+    "version": "next",
+    "name": "Memex",
+    "iconUrl": "https://memex.yoursite.com/images/logo.svg",
+    "splashImageUrl": "https://memex.yoursite.com/images/meme1.svg",
+    "splashBackgroundColor": "#1E293B",
+    "homeUrl": "https://memex.yoursite.com/minikit"
+  }
+} 

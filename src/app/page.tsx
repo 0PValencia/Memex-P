@@ -58,40 +58,41 @@ export default function Home() {
   }, [allMemes, activeTab, refreshKey])
 
   return (
-    <main className="min-h-screen bg-white animate-fadeIn">
-      {/* Hero Section */}
-      <section className="hero-gradient py-20">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center justify-between">
-            <div className="md:w-1/2 mb-8 md:mb-0">
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
-                Crea, Comparte y <span className="text-blue-300">Gana</span> con Memes
+    <main className="min-h-screen animate-fadeIn">
+      {/* Hero Section - más compacto */}
+      <section className="hero-gradient py-14">
+        <div className="max-w-5xl mx-auto px-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="md:w-1/2 z-10">
+              <h1 className="text-3xl md:text-5xl font-bold mb-4 leading-tight text-white">
+                Crea, Comparte y <span className="text-accent-color">Gana</span> con Memes
               </h1>
-              <p className="text-xl mb-8 text-gray-100">
+              <p className="text-lg mb-6 text-text-primary">
                 La primera plataforma Web3 donde los memes virales generan recompensas para creadores y apostadores.
               </p>
-              <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
-                <Link href="/explore" className="btn bg-white text-blue-700 hover:bg-gray-100 py-3 px-6 rounded-lg font-medium text-center shadow-md hover:shadow-lg transition-all">
+              <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
+                <Link href="/explore" className="button secondary py-2 px-5 text-center">
                   Explorar Memes
                 </Link>
-                <Link href="/create" className="btn bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-medium text-center shadow-md hover:shadow-lg transition-all">
+                <Link href="/create" className="button primary py-2 px-5 text-center">
                   Crear Meme
                 </Link>
               </div>
             </div>
-            <div className="md:w-5/12 relative">
-              <div className="bg-white p-3 rounded-lg shadow-xl transform rotate-3 transition-transform hover:rotate-0">
-                <Image 
-                  src="/images/meme1.svg" 
-                  alt="Meme Example" 
-                  width={400} 
-                  height={400} 
-                  className="rounded"
-                  priority
-                />
-                <div className="viral-badge">
-                  <span className="block text-xs text-green-600 mb-0.5">¡Viral!</span>
-                  +120 ETH
+            <div className="md:w-1/2 relative z-10">
+              <div className="glass-effect p-3 rounded-lg transform rotate-1 transition-transform hover:rotate-0 border-gradient">
+                <div className="border-gradient-content">
+                  <Image
+                    src="/memes/meme1.jpg" 
+                    alt="Meme Example" 
+                    width={500} 
+                    height={400} 
+                    className="rounded"
+                    priority
+                  />
+                  <div className="viral-badge">
+                    +120 ETH
+                  </div>
                 </div>
               </div>
             </div>
@@ -99,65 +100,65 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How it Works Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">¿Cómo funciona Memex?</h2>
+      {/* How it Works Section - más espacioso */}
+      <section className="py-14">
+        <div className="max-w-5xl mx-auto px-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-center mb-10">¿Cómo funciona Memex?</h2>
           
-          <div className="grid md:grid-cols-4 gap-8">
-            <div className="text-center transform transition-transform hover:-translate-y-1">
+          <div className="grid md:grid-cols-4 gap-6">
+            <div className="text-center transform transition-transform hover:-translate-y-2 content-card">
               <div className="icon-container">
                 <span className="icon-number">1</span>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Conecta tu Wallet</h3>
-              <p className="text-gray-600">Conecta tu wallet de Coinbase u otra wallet compatible con la red Base.</p>
+              <h3 className="text-lg font-semibold mb-2">Conecta tu Wallet</h3>
+              <p className="text-text-secondary text-sm">Conecta tu wallet de Coinbase u otra wallet compatible con la red Base.</p>
             </div>
-            
-            <div className="text-center transform transition-transform hover:-translate-y-1">
+
+            <div className="text-center transform transition-transform hover:-translate-y-2 content-card">
               <div className="icon-container">
                 <span className="icon-number">2</span>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Crea un Meme NFT</h3>
-              <p className="text-gray-600">Sube una imagen, añade un título creativo y una descripción para convertirlo en NFT.</p>
+              <h3 className="text-lg font-semibold mb-2">Crea un Meme NFT</h3>
+              <p className="text-text-secondary text-sm">Sube una imagen, añade un título creativo y una descripción para convertirlo en NFT.</p>
             </div>
             
-            <div className="text-center transform transition-transform hover:-translate-y-1">
+            <div className="text-center transform transition-transform hover:-translate-y-2 content-card">
               <div className="icon-container">
                 <span className="icon-number">3</span>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Apuesta por Memes</h3>
-              <p className="text-gray-600">Apuesta por los memes que crees que se volverán virales y ganarán más popularidad.</p>
+              <h3 className="text-lg font-semibold mb-2">Apuesta por Memes</h3>
+              <p className="text-text-secondary text-sm">Apuesta por los memes que crees que se volverán virales y ganarán más popularidad.</p>
             </div>
             
-            <div className="text-center transform transition-transform hover:-translate-y-1">
+            <div className="text-center transform transition-transform hover:-translate-y-2 content-card">
               <div className="icon-container">
                 <span className="icon-number">4</span>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Recibe Recompensas</h3>
-              <p className="text-gray-600">Si el meme se vuelve viral, tanto el creador como los apostadores reciben recompensas.</p>
+              <h3 className="text-lg font-semibold mb-2">Recibe Recompensas</h3>
+              <p className="text-text-secondary text-sm">Si el meme se vuelve viral, tanto el creador como los apostadores reciben recompensas.</p>
             </div>
           </div>
           
-          <div className="mt-16 bg-blue-50 p-8 rounded-lg border border-blue-200 shadow-inner">
+          <div className="mt-12 glass-effect p-6 rounded-lg">
             <h3 className="text-xl font-semibold mb-3">¿Cómo se determina la viralidad?</h3>
-            <p>Nuestro algoritmo analiza múltiples factores para determinar la viralidad de un meme:</p>
-            <ul className="list-disc list-inside space-y-1 mt-4 text-gray-700">
+            <p className="text-sm">Nuestro algoritmo analiza múltiples factores para determinar la viralidad de un meme:</p>
+            <ul className="list-disc list-inside space-y-1 mt-3 text-text-secondary text-sm">
               <li>Número de apuestas y tamaño del bote</li>
               <li>Interacciones sociales (vistas, likes, comentarios)</li>
               <li>Tiempo en tendencias</li>
               <li>Número de compartidos en redes sociales</li>
             </ul>
-            <p className="mt-4">Cuando un meme supera nuestro umbral de viralidad, automáticamente se distribuyen las recompensas: 50% para el creador y 50% entre los apostadores.</p>
+            <p className="mt-3 text-sm">Cuando un meme supera nuestro umbral de viralidad, automáticamente se distribuyen las recompensas: 50% para el creador y 50% entre los apostadores.</p>
           </div>
         </div>
       </section>
 
       {/* Create Meme Section */}
-      <section id="create" className="py-20 bg-white">
-        <div className="max-w-4xl mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold mb-10 text-center">Crea tu Meme</h2>
+      <section id="create" className="py-14">
+        <div className="max-w-3xl mx-auto px-4">
+          <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center">Crea tu Meme</h2>
           
-          <div className="bg-white p-8 rounded-lg shadow-lg mb-8">
+          <div className="glass-effect p-6 rounded-lg mb-8">
             <ConnectWallet />
             <CreateMemeForm />
           </div>
@@ -165,19 +166,19 @@ export default function Home() {
       </section>
 
       {/* Trending Memes Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="flex flex-col sm:flex-row justify-between items-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 sm:mb-0">Explora Memes</h2>
-            <div className="flex items-center space-x-4">
+      <section className="py-14">
+        <div className="max-w-5xl mx-auto px-4">
+          <div className="flex flex-col sm:flex-row justify-between items-center mb-10">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 sm:mb-0">Explora Memes</h2>
+            <div className="flex items-center space-x-3">
               <button
                 onClick={handleRefresh}
-                className="p-2 bg-blue-50 rounded-full hover:bg-blue-100 transition-colors mr-4"
+                className="p-2 glass-effect rounded-full transition-all hover:bg-bg-tertiary mr-2"
                 disabled={isLoading}
                 title="Actualizar memes"
               >
                 <svg 
-                  className={`w-6 h-6 text-blue-600 ${isLoading ? 'animate-spin' : ''}`} 
+                  className={`w-5 h-5 text-accent-color ${isLoading ? 'animate-spin' : ''}`} 
                   fill="none" 
                   stroke="currentColor" 
                   viewBox="0 0 24 24" 
@@ -191,23 +192,23 @@ export default function Home() {
                   />
                 </svg>
               </button>
-              <div className="flex border rounded-lg overflow-hidden shadow">
+              <div className="glass-effect rounded-lg overflow-hidden">
                 <button
                   onClick={() => setActiveTab('trending')}
-                  className={`px-5 py-2.5 font-medium transition-colors ${
+                  className={`px-4 py-2 font-medium transition-colors text-sm ${
                     activeTab === 'trending' 
-                      ? 'bg-blue-600 text-white' 
-                      : 'bg-white text-gray-700 hover:bg-gray-100'
+                      ? 'bg-primary-color text-white' 
+                      : 'hover:bg-bg-tertiary'
                   }`}
                 >
                   Trending
                 </button>
                 <button
                   onClick={() => setActiveTab('latest')}
-                  className={`px-5 py-2.5 font-medium transition-colors ${
+                  className={`px-4 py-2 font-medium transition-colors text-sm ${
                     activeTab === 'latest' 
-                      ? 'bg-blue-600 text-white' 
-                      : 'bg-white text-gray-700 hover:bg-gray-100'
+                      ? 'bg-primary-color text-white' 
+                      : 'hover:bg-bg-tertiary'
                   }`}
                 >
                   Recientes
@@ -215,77 +216,98 @@ export default function Home() {
               </div>
             </div>
           </div>
-
-          {/* Estado de carga y memes */}
+          
           {isLoading ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[...Array(6)].map((_, index) => (
-                <div key={index} className="bg-white rounded-lg shadow animate-pulse">
-                  <div className="h-64 bg-gray-200 rounded-t-lg"></div>
-                  <div className="p-4 space-y-3">
-                    <div className="h-6 bg-gray-200 rounded w-3/4"></div>
-                    <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-                    <div className="h-10 bg-gray-200 rounded w-full"></div>
-                  </div>
-                </div>
-              ))}
+            <div className="flex justify-center items-center py-12">
+              <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-accent-color"></div>
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <>
               {displayMemes.length > 0 ? (
-                displayMemes.map((meme) => (
-                  <MemeCard key={`${meme.id}-${refreshKey}`} {...meme} />
-                ))
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {/* Memes con imágenes reales */}
+                  <MemeCard
+                    key="meme1"
+                    id="meme1"
+                    title="Cuando el café te pega de golpe"
+                    imageUrl="/memes/meme1.jpg"
+                    description="La sensación exacta al tomar el primer café de la mañana"
+                    creator="0x1234567890abcdef1234567890abcdef12345678"
+                    currentBets={45}
+                    totalPot={1.25}
+                    createdAt={new Date().toISOString()}
+                  />
+                  <MemeCard
+                    key="meme2"
+                    id="meme2"
+                    title="Programando a las 3am"
+                    imageUrl="/memes/meme2.jpg"
+                    description="Cuando el código finalmente funciona pero no sabes por qué"
+                    creator="0x2345678901abcdef2345678901abcdef23456789"
+                    currentBets={32}
+                    totalPot={0.85}
+                    createdAt={new Date().toISOString()}
+                  />
+                  <MemeCard
+                    key="meme3"
+                    id="meme3"
+                    title="El drama de las reuniones"
+                    imageUrl="/memes/meme3.jpg"
+                    description="Cuando la reunión podría haber sido un email"
+                    creator="0x3456789012abcdef3456789012abcdef34567890"
+                    currentBets={28}
+                    totalPot={0.65}
+                    createdAt={new Date().toISOString()}
+                  />
+                  <MemeCard
+                    key="meme4"
+                    id="meme4"
+                    title="Expectativa vs. Realidad"
+                    imageUrl="/memes/meme4.jpg"
+                    description="Lo que esperabas vs. lo que conseguiste"
+                    creator="0x4567890123abcdef4567890123abcdef45678901"
+                    currentBets={38}
+                    totalPot={0.95}
+                    createdAt={new Date().toISOString()}
+                  />
+                  <MemeCard
+                    key="meme5"
+                    id="meme5"
+                    title="Lunes por la mañana"
+                    imageUrl="/memes/meme5.jpg"
+                    description="La cara de todos al empezar la semana"
+                    creator="0x5678901234abcdef5678901234abcdef56789012"
+                    currentBets={42}
+                    totalPot={1.15}
+                    createdAt={new Date().toISOString()}
+                  />
+                  <MemeCard
+                    key="meme6"
+                    id="meme6"
+                    title="Modo incógnito"
+                    imageUrl="/memes/meme6.jpg"
+                    description="Cuando usas el modo incógnito para sorpresas de cumpleaños, claro"
+                    creator="0x6789012345abcdef6789012345abcdef67890123"
+                    currentBets={36}
+                    totalPot={0.90}
+                    createdAt={new Date().toISOString()}
+                  />
+                </div>
               ) : (
-                <p className="col-span-3 text-center text-gray-500 py-20">
-                  No hay memes para mostrar. ¡Sé el primero en crear uno!
-                </p>
+                <div className="text-center py-10">
+                  <p className="text-text-secondary">No hay memes para mostrar. ¡Crea el primero!</p>
+                </div>
               )}
-            </div>
+            </>
           )}
           
-          <div className="text-center mt-12">
-            <Link 
-              href="/explore" 
-              className="btn-primary py-3 px-8 rounded-lg font-medium inline-block shadow-md hover:shadow-lg transition-all"
-            >
+          <div className="mt-10 text-center">
+            <Link href="/explore" className="button secondary py-2 px-4">
               Ver más memes
             </Link>
           </div>
         </div>
       </section>
-      
-      {/* Footer */}
-      <footer className="bg-gray-800 text-white py-16">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-10">
-            <div>
-              <h3 className="text-2xl font-bold mb-4">Memex<span className="text-blue-400">.</span></h3>
-              <p className="text-gray-400">La plataforma definitiva para crear, compartir y apostar por memes en la blockchain.</p>
-            </div>
-            <div>
-              <h3 className="text-xl font-bold mb-4">Enlaces</h3>
-              <ul className="space-y-3">
-                <li><Link href="/" className="text-gray-400 hover:text-white transition-colors">Inicio</Link></li>
-                <li><Link href="/trending" className="text-gray-400 hover:text-white transition-colors">Trending</Link></li>
-                <li><Link href="/dashboard" className="text-gray-400 hover:text-white transition-colors">Dashboard</Link></li>
-                <li><Link href="/settings" className="text-gray-400 hover:text-white transition-colors">Configuración</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-xl font-bold mb-4">Comunidad</h3>
-              <ul className="space-y-3">
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Discord</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Twitter</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">GitHub</a></li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-gray-700 mt-12 pt-8 text-center text-gray-400">
-            <p>&copy; {new Date().getFullYear()} Memex. Todos los derechos reservados.</p>
-          </div>
-        </div>
-      </footer>
     </main>
   )
 }

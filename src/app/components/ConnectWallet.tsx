@@ -1,19 +1,32 @@
 'use client'
 
 import { useAccount, useConnect, useDisconnect } from 'wagmi'
-import { useWeb3Modal } from '@coinbase/onchainkit'
+import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
+import { InjectedConnector } from 'wagmi/connectors/injected'
 
 export default function ConnectWallet() {
   const { isConnected, address } = useAccount()
   const { disconnect } = useDisconnect()
-  const { open } = useWeb3Modal()
+  const { connect } = useConnect()
+
+  // Función para conectar wallet
+  const handleConnect = () => {
+    connect({ 
+      connector: new CoinbaseWalletConnector({
+        chains: [],
+        options: {
+          appName: 'Memex',
+        },
+      })
+    })
+  }
 
   if (isConnected && address) {
     return (
       <div className="flex items-center">
         <button 
           onClick={() => disconnect()}
-          className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+          className="button primary"
         >
           Desconectar
         </button>
@@ -23,8 +36,8 @@ export default function ConnectWallet() {
 
   return (
     <button 
-      onClick={() => open()}
-      className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+      onClick={handleConnect}
+      className="button primary"
     >
       Conectar Wallet
     </button>

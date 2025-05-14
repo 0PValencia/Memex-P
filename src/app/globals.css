@@ -698,3 +698,22 @@ nav {
   position: relative !important;
   max-height: 500px !important;
 }
+
+/* Ocultar iconos de validación del navegador */
+::-webkit-validation-bubble-message,
+::-webkit-validation-bubble-arrow-clipper,
+::-webkit-validation-bubble-arrow,
+::-webkit-validation-bubble-icon {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+input:invalid {
+  box-shadow: none !important;
+}
+
+input:required {
+  box-shadow: none !important;
+  background-image: none !important;
+}

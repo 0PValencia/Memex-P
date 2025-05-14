@@ -39,16 +39,16 @@ export default function CreateMemePage() {
   }
   
   return (
-    <main className="min-h-screen bg-white p-4">
+    <main className="min-h-screen bg-bg-primary p-4">
       <div className="max-w-4xl mx-auto">
         <div className="flex flex-col sm:flex-row justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-black mb-4 sm:mb-0">
+          <h1 className="text-3xl font-bold text-text-primary mb-4 sm:mb-0">
             {t.createMeme}
           </h1>
           <ConnectWallet />
         </div>
         
-        <div className="bg-white shadow-lg rounded-lg p-6">
+        <div className="bg-bg-secondary shadow-lg rounded-lg p-6 border border-border-color">
           <CreateMemeForm onMemeCreated={handleMemeCreated} />
         </div>
       </div>

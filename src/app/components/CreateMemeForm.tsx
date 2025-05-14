@@ -6,6 +6,7 @@ import { MEMEX_CONTRACT_ABI, MEMEX_CONTRACT_ADDRESSES } from '@/utils/contracts'
 import Image from 'next/image'
 import { triggerMemesUpdate } from '../mocks/sampleMemes'
 import { base } from 'viem/chains'
+import { parseGwei } from 'viem'
 
 // Configuración de IPFS con Infura (necesitarás tus propias claves en producción)
 const projectId = process.env.NEXT_PUBLIC_INFURA_PROJECT_ID || ''
@@ -49,7 +50,7 @@ export default function CreateMemeForm({ onMemeCreated }: { onMemeCreated?: () =
   const { write, isLoading, isSuccess, error: contractError } = useContractWrite({
     address: contractAddress as `0x${string}`,
     abi: MEMEX_CONTRACT_ABI,
-    functionName: 'createMeme',
+    functionName: 'safeMint',
   })
   
   // Inicializar IPFS del lado del cliente (versión simulada)
@@ -59,7 +60,7 @@ export default function CreateMemeForm({ onMemeCreated }: { onMemeCreated?: () =
   useEffect(() => {
     if (contractError) {
       console.error('Error del contrato:', contractError)
-      setError(`Error del contrato: ${contractError.message}`)
+      setError(`Error al interactuar con el contrato: ${contractError.message}`)
     }
   }, [contractError])
 
@@ -170,11 +171,15 @@ export default function CreateMemeForm({ onMemeCreated }: { onMemeCreated?: () =
               createdAt: new Date().toISOString()
             }
             
-            // Convertir metadatos a string para la llamada al contrato
-            const metadataStr = JSON.stringify(metadata)
+            // Usar un formato simple para el tokenURI
+            const tokenURI = `ipfs://memex/${Date.now()}`
             
-            // Llamar al contrato inteligente para mintear el meme
-            write({ args: [metadataStr] })
+            console.log('Enviando tokenURI al contrato:', tokenURI)
+            
+            // Llamar al contrato inteligente con un formato simple
+            write({ 
+              args: [address, tokenURI]
+            })
             
             setSuccess('¡Transacción iniciada! Interactuando con el contrato en Base mainnet...')
           } catch (contractErr) {
@@ -335,6 +340,7 @@ export default function CreateMemeForm({ onMemeCreated }: { onMemeCreated?: () =
             placeholder="Ingresa un título creativo"
             className="w-full"
             required
+            style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}
           />
           <p className="mt-1 text-xs text-text-secondary text-right">
             {title.length}/100
@@ -343,21 +349,31 @@ export default function CreateMemeForm({ onMemeCreated }: { onMemeCreated?: () =
         
         {/* Descripción */}
         <div className="form-group">
-          <label htmlFor="description" className="block text-text-secondary mb-2">
-            Descripción (opcional)
+          <label htmlFor="description" className="block text-text-secondary mb-2 flex items-center">
+            Descripción del Meme
+            <span className="ml-2 text-xs opacity-70">(opcional)</span>
           </label>
-          <textarea
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            maxLength={300}
-            placeholder="Explica el contexto o agrega etiquetas"
-            className="w-full min-h-[100px]"
-            rows={4}
-          />
-          <p className="mt-1 text-xs text-text-secondary text-right">
-            {description.length}/300
-          </p>
+          
+          <div className="relative">
+            <textarea
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              maxLength={300}
+              placeholder="¿De qué trata este meme? Añade contexto, historia o hashtags para ayudar a otros a entenderlo mejor."
+              className="w-full min-h-[120px] rounded-lg p-4 transition-colors focus:border-primary-color"
+              rows={4}
+            />
+            
+            <div className="mt-2 flex justify-between items-center text-xs text-text-secondary">
+              <p className="italic">Consejo: Una buena descripción aumenta las posibilidades de que tu meme se vuelva viral 🚀</p>
+              <p className="text-right font-mono">
+                <span className={description.length > 250 ? "text-accent-secondary" : ""}>
+                  {description.length}
+                </span>/300
+              </p>
+            </div>
+          </div>
         </div>
         
         {/* Mensajes de error y éxito */}

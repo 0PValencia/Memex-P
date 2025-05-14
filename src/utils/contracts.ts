@@ -6,7 +6,7 @@ import { base, baseSepolia } from 'viem/chains'
 export const MEMEX_CONTRACT_ADDRESSES: Record<number, Address> = {
   // Ethereum Mainnet
   1: '0xMemexContractAddressEthereum' as Address,
-  // Base Mainnet
+  // Base Mainnet - Usar la misma dirección que en testnet para pruebas
   [base.id]: '0x8bD92FbCC798Ef33aF0A346bFCb279F15F5964A8' as Address,
   // Base Sepolia (testnet)
   [baseSepolia.id]: '0x8bD92FbCC798Ef33aF0A346bFCb279F15F5964A8' as Address,
@@ -22,6 +22,15 @@ export const MEMEX_CONTRACT_ADDRESSES: Record<number, Address> = {
 export const MEMEX_CONTRACT_ABI = [
   // Eventos
   {
+    name: 'Transfer',
+    type: 'event',
+    inputs: [
+      { indexed: true, name: 'from', type: 'address' },
+      { indexed: true, name: 'to', type: 'address' },
+      { indexed: true, name: 'tokenId', type: 'uint256' }
+    ]
+  },
+  {
     name: 'MemeCreated',
     type: 'event',
     inputs: [
@@ -30,38 +39,35 @@ export const MEMEX_CONTRACT_ABI = [
       { indexed: false, name: 'tokenURI', type: 'string' }
     ]
   },
-  {
-    name: 'BetPlaced',
-    type: 'event',
-    inputs: [
-      { indexed: true, name: 'tokenId', type: 'uint256' },
-      { indexed: true, name: 'better', type: 'address' },
-      { indexed: false, name: 'amount', type: 'uint256' },
-      { indexed: false, name: 'newTotalPot', type: 'uint256' }
-    ]
-  },
-  
   // Funciones de vista
   {
-    name: 'getMemeInfo',
+    name: 'name',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [{ type: 'string' }]
+  },
+  {
+    name: 'symbol',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [{ type: 'string' }]
+  },
+  {
+    name: 'tokenURI',
     type: 'function',
     stateMutability: 'view',
     inputs: [{ name: 'tokenId', type: 'uint256' }],
-    outputs: [{
-      type: 'tuple',
-      components: [
-        { name: 'id', type: 'uint256' },
-        { name: 'creator', type: 'address' },
-        { name: 'totalBets', type: 'uint256' },
-        { name: 'totalPot', type: 'uint256' },
-        { name: 'isActive', type: 'bool' },
-        { name: 'createdAt', type: 'uint256' },
-        { name: 'viralityScore', type: 'uint256' },
-        { name: 'lastUpdateTime', type: 'uint256' }
-      ]
-    }]
+    outputs: [{ type: 'string' }]
   },
-  
+  {
+    name: 'ownerOf',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [{ name: 'tokenId', type: 'uint256' }],
+    outputs: [{ name: '', type: 'address' }]
+  },
   // Funciones de escritura
   {
     name: 'createMeme',
@@ -71,10 +77,13 @@ export const MEMEX_CONTRACT_ABI = [
     outputs: [{ name: '', type: 'uint256' }]
   },
   {
-    name: 'betOnMeme',
+    name: 'safeMint',
     type: 'function',
-    stateMutability: 'payable',
-    inputs: [{ name: 'tokenId', type: 'uint256' }],
+    stateMutability: 'nonpayable',
+    inputs: [
+      { name: 'to', type: 'address' },
+      { name: 'tokenURI', type: 'string' }
+    ],
     outputs: []
   }
 ];

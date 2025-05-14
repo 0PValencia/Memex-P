@@ -137,102 +137,111 @@ export default function MemeCard({
   }, [isSuccess])
 
   return (
-    <div className="meme-card">
-      <div className="relative h-48 sm:h-64 md:h-72 overflow-hidden">
-        {mounted && (
-          isBase64Image ? (
-            // Renderizar imágenes base64 como img normal en lugar de usar Image de Next.js
-            <div className="w-full h-full relative">
-              <img
-                src={imageSrc}
-                alt={title}
-                className="absolute inset-0 w-full h-full object-cover"
-                onError={handleImageError}
-              />
-            </div>
-          ) : (
-            <Image
-              src={imageError ? FALLBACK_IMAGE : imageSrc}
-              alt={title}
-              fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              priority
-              className="object-cover transition-transform duration-500 hover:scale-110"
-              onError={handleImageError}
-              style={{ objectFit: 'cover', objectPosition: 'center' }}
-              unoptimized={true} // No optimizar ninguna imagen para evitar problemas
-            />
-          )
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-bg-primary/90 via-bg-primary/30 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end">
-          <div className="p-5 w-full">
-            <div className="flex items-center mb-2">
-              <div className="w-8 h-8 rounded-full bg-primary-color flex items-center justify-center text-white text-xs">
-                {creator ? creator.slice(0, 2).toUpperCase() : 'AN'}
-              </div>
-              <span className="ml-2 font-medium text-text-primary">
-                {creator ? creator.slice(0, 6) + '...' + creator.slice(-4) : 'Anónimo'}
-              </span>
-            </div>
-            <div className="flex justify-between text-sm text-text-secondary">
-              <span>{formattedDate}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <div className="p-5">
-        <h3 className="text-xl font-bold mb-3">{title}</h3>
-        
+    <div className="meme-card border-y border-border-color hover:bg-bg-secondary/20 transition-colors text-center">
+      <div className="px-4 pt-3">
+        {/* Título y descripción */}
+        <h3 className="font-bold mb-1 text-center">{title}</h3>
         {description && (
-          <p className="text-text-secondary mb-4 line-clamp-2">{description}</p>
+          <p className="text-text-primary mb-2 text-sm line-clamp-2 text-center">{description}</p>
         )}
         
-        <div className="flex justify-between items-center mb-4 border-t border-b border-border-color py-3 my-3">
-          <div className="flex flex-col">
-            <span className="text-sm text-text-secondary">Apuestas</span>
-            <span className="text-lg font-semibold">{currentBets}</span>
-          </div>
-          <div className="flex flex-col text-right">
-            <span className="text-sm text-text-secondary">Pote</span>
-            <span className="text-lg font-semibold text-accent-color">{formatPot(totalPot)} ETH</span>
-          </div>
-        </div>
-
-        {/* Mensajes de error o éxito */}
-        {error && (
-          <div className="mb-4 text-sm text-red-600 bg-red-950/20 p-3 rounded">
-            {error}
-          </div>
-        )}
-        
-        {success && (
-          <div className="mb-4 text-sm text-green-500 bg-green-950/20 p-3 rounded">
-            {success}
-          </div>
-        )}
-        
-        <button
-          onClick={handleBet}
-          disabled={isLoading || !isConnected}
-          className={`w-full py-3 rounded-md font-medium ${
-            isLoading 
-              ? 'bg-gray-400 cursor-not-allowed' 
-              : 'button primary'
-          }`}
-        >
-          {isLoading ? (
-            <div className="flex items-center justify-center">
-              <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              Procesando...
-            </div>
-          ) : (
-            <>Apostar 0.001 ETH</>
+        {/* Imagen del meme */}
+        <div className="relative rounded-xl overflow-hidden mb-3 border border-border-color mx-auto">
+          {mounted && (
+            isBase64Image ? (
+              <div className="w-full h-0 pb-[56.25%] relative">
+                <img
+                  src={imageSrc}
+                  alt={title}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  onError={handleImageError}
+                />
+              </div>
+            ) : (
+              <div className="w-full h-0 pb-[56.25%] relative">
+                <Image
+                  src={imageError ? FALLBACK_IMAGE : imageSrc}
+                  alt={title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  priority
+                  className="object-cover"
+                  onError={handleImageError}
+                  style={{ objectFit: 'cover', objectPosition: 'center' }}
+                  unoptimized={false}
+                />
+              </div>
+            )
           )}
-        </button>
+        </div>
+        
+        {/* Información del creador */}
+        <div className="flex items-center justify-center mb-2">
+          <div className="w-8 h-8 rounded-full bg-accent-color flex items-center justify-center text-white font-semibold mr-2">
+            {creator ? creator.slice(0, 2).toUpperCase() : 'AN'}
+          </div>
+          <span className="font-bold text-text-primary">
+            {creator ? creator.slice(0, 6) + '...' + creator.slice(-4) : 'Anónimo'}
+          </span>
+          <span className="ml-1 text-text-secondary">·</span>
+          <span className="ml-1 text-text-secondary text-sm">{formattedDate}</span>
+        </div>
+        
+        {/* Información de apuestas y pote */}
+        <div className="flex items-center justify-center text-xs font-medium mb-3">
+          <span className="bg-bg-tertiary text-text-primary px-2 py-1 rounded-full">
+            {currentBets} apuestas
+          </span>
+          <span className="mx-2 text-text-secondary">•</span>
+          <span className="bg-accent-color bg-opacity-10 text-accent-color px-2 py-1 rounded-full">
+            {formatPot(totalPot)} ETH
+          </span>
+        </div>
+        
+        {/* Botones de acción e interacción */}
+        <div className="flex justify-center space-x-8 py-2 px-2 border-t border-border-color">
+          <button className="action-button">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+            <span>3</span>
+          </button>
+          <button className="action-button">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+            </svg>
+            <span>23</span>
+          </button>
+          <button className="action-button">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
+            <span>12</span>
+          </button>
+        </div>
+        
+        {/* Botón para apostar */}
+        <div className="px-4 pb-4">
+          <button
+            onClick={handleBet}
+            disabled={isLoading || !isConnected}
+            className={`w-full py-2 rounded-full text-white text-sm font-semibold transition-colors ${
+              isLoading
+                ? 'bg-accent-color opacity-70 cursor-not-allowed'
+                : 'bg-accent-color hover:bg-accent-color/90'
+            }`}
+          >
+            {isLoading ? 'Procesando...' : 'Apostar 0.001 ETH'}
+          </button>
+          
+          {error && (
+            <p className="text-error-color text-xs mt-2">{error}</p>
+          )}
+          
+          {success && (
+            <p className="text-success-color text-xs mt-2">{success}</p>
+          )}
+        </div>
       </div>
     </div>
   )

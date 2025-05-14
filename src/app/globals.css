@@ -3,30 +3,30 @@
 @tailwind utilities;
 
 :root {
-  /* Paleta de colores principal - Tema más claro y minimalista */
-  --primary-color: #6d28d9;
-  --primary-hover: #5b21b6;
-  --secondary-color: #475569;
-  --text-primary: #f1f5f9;
-  --text-secondary: #cbd5e1;
-  --bg-primary: #111827;
-  --bg-secondary: #1f2937;
-  --bg-tertiary: #374151;
-  --accent-color: #60a5fa;
-  --accent-secondary: #f43f5e;
-  --success-color: #10b981;
-  --error-color: #ef4444;
-  --border-color: #2d3748;
-  --border-radius: 0.5rem;
-  --border-radius-lg: 0.75rem;
-  --border-radius-sm: 0.25rem;
+  /* Paleta de colores de X (Twitter) */
+  --primary-color: #1DA1F2; /* Azul de Twitter */
+  --primary-hover: #1a91da;
+  --secondary-color: #536471;
+  --text-primary: #E7E9EA; /* Texto principal blanco con ligero tinte */
+  --text-secondary: #71767B; /* Texto secundario gris */
+  --bg-primary: #000000; /* Fondo negro */
+  --bg-secondary: #16181C; /* Componentes sobre fondo */
+  --bg-tertiary: #202327; /* Elementos terciarios */
+  --accent-color: #1DA1F2; /* Azul para acentos */
+  --accent-secondary: #F91880; /* Rosa para likes */
+  --success-color: #00BA7C; /* Verde para éxito */
+  --error-color: #F4212E; /* Rojo para errores */
+  --border-color: #2F3336; /* Bordes sutiles */
+  --border-radius: 1rem; /* Bordes más redondeados */
+  --border-radius-lg: 1.25rem;
+  --border-radius-sm: 0.5rem;
   
   /* Sombras más sutiles */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 4px 8px -2px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 8px 16px -4px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.25);
   
-  /* Espaciado más generoso */
+  /* Espaciado */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -35,12 +35,12 @@
   --space-8: 2rem;
   --space-12: 3rem;
   
-  /* Tipografía */
-  --font-heading: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --line-height-tight: 1.2;
-  --line-height-normal: 1.6;
-  --letter-spacing-wide: 0.015em;
+  /* Tipografía estilo X */
+  --font-heading: 'Chirp', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-body: 'Chirp', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --line-height-tight: 1.3;
+  --line-height-normal: 1.5;
+  --letter-spacing-normal: 0;
 }
 
 /* Base y resets */
@@ -63,144 +63,166 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  padding-top: 90px !important;
 }
 
-/* Encabezados con mejor tipografía */
+/* Encabezados con estilo X */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
   font-weight: 700;
   line-height: var(--line-height-tight);
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-3);
   color: var(--text-primary);
 }
 
 h1 {
-  font-size: 2.25rem;
-  background: linear-gradient(to right, var(--primary-color), var(--accent-color));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  font-size: 2rem;
+  color: var(--text-primary);
   display: inline-block;
 }
 
 h2 {
-  font-size: 1.75rem;
+  font-size: 1.5rem;
 }
 
 h3 {
-  font-size: 1.35rem;
+  font-size: 1.25rem;
 }
 
 p {
   margin-bottom: var(--space-4);
 }
 
-/* Navegación */
+/* Navegación estilo X */
 nav {
-  background-color: var(--bg-secondary) !important;
-  backdrop-filter: blur(10px) !important;
-  border-bottom: 1px solid var(--border-color) !important;
-  box-shadow: var(--shadow-sm) !important;
-  padding: 0.5rem 1rem !important;
-  position: fixed !important;
+  background-color: black !important;
+  position: absolute !important;
   top: 0 !important;
+  height: auto !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  box-shadow: none !important;
+  padding: 0 !important;
   left: 0 !important;
   right: 0 !important;
   z-index: 50 !important;
   display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  transition: all 0.3s ease !important;
+  flex-direction: column !important;
 }
 
-nav a {
+nav .nav-link {
   color: var(--text-primary) !important;
   font-weight: 500 !important;
   text-decoration: none !important;
-  padding: 0.4rem 0.6rem !important;
-  border-radius: var(--border-radius) !important;
-  transition: all 0.2s ease !important;
-  position: relative !important;
+  padding: 0.5rem 0.65rem !important;
+  border-radius: 9999px !important;
+  transition: background-color 0.2s ease !important;
   font-size: 0.9rem !important;
+  white-space: nowrap !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+nav .nav-link:hover {
+  background-color: rgba(239, 243, 244, 0.1) !important;
+}
+
+.memex-logo {
+  font-size: 1.5rem !important;
+  font-weight: 700 !important;
+  color: var(--text-primary) !important;
+  text-decoration: none !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  position: relative !important;
+}
+
+nav .button.primary {
+  background-color: var(--primary-color) !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  color: white !important;
+  padding: 0.5rem 1.25rem !important;
+}
+
+/* Estilo para el logo Memex */
+nav a.no-border {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  padding-right: 0 !important;
 }
 
 nav a:hover {
-  color: var(--accent-color) !important;
+  background-color: rgba(239, 243, 244, 0.1) !important;
+  color: var(--text-primary) !important;
 }
 
-nav a::after {
-  content: '' !important;
-  position: absolute !important;
-  bottom: 0 !important;
-  left: 50% !important;
-  width: 0 !important;
-  height: 2px !important;
-  background: var(--accent-color) !important;
-  transition: all 0.3s ease !important;
-  transform: translateX(-50%) !important;
-}
-
-nav a:hover::after {
-  width: 60% !important;
+/* Evitar hover effect en el logo */
+nav a.no-border:hover {
+  background-color: transparent !important;
 }
 
 nav a.active {
-  color: var(--accent-color) !important;
-  font-weight: 600 !important;
+  font-weight: 700 !important;
+  color: var(--text-primary) !important;
 }
 
-nav a.active::after {
-  width: 60% !important;
+@media (max-width: 768px) {
+  nav .container > div:last-child {
+    overflow-x: auto !important;
+    -ms-overflow-style: none !important; /* IE y Edge */
+    scrollbar-width: none !important; /* Firefox */
+    padding-bottom: 0.5rem !important;
+  }
+  
+  nav .container > div:last-child::-webkit-scrollbar {
+    display: none !important;
+  }
 }
 
-/* Tarjetas de Memes - diseño más compacto y minimalista */
+/* Tarjetas de Memes - estilo X */
 .meme-card {
-  background-color: var(--bg-secondary) !important;
-  border-radius: var(--border-radius) !important;
-  box-shadow: var(--shadow-md) !important;
+  background-color: var(--bg-primary) !important;
+  border-radius: 0 !important;
   overflow: hidden !important;
-  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
-  margin-bottom: 1.5rem !important;
-  border: 1px solid var(--border-color) !important;
+  transition: background-color 0.2s ease !important;
+  margin-bottom: 0 !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-top: none !important;
+  box-shadow: none !important;
 }
 
 .meme-card:hover {
-  transform: translateY(-4px) !important;
-  box-shadow: var(--shadow-lg) !important;
+  background-color: rgba(255, 255, 255, 0.03) !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
-.meme-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--accent-color);
-  z-index: 1;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.meme-card:hover::before {
-  opacity: 1;
+.meme-card:before {
+  display: none;
 }
 
 .meme-card-header {
   display: flex !important;
   align-items: center !important;
   padding: 0.75rem 1rem !important;
-  border-bottom: 1px solid var(--border-color) !important;
+  border-bottom: none !important;
 }
 
 .meme-card-header .avatar {
-  width: 2rem !important;
-  height: 2rem !important;
+  width: 3rem !important;
+  height: 3rem !important;
   border-radius: 50% !important;
   margin-right: 0.75rem !important;
   object-fit: cover !important;
   background-color: var(--bg-tertiary) !important;
-  border: 1px solid var(--accent-color) !important;
+  border: none !important;
 }
 
 .meme-card-content {
@@ -211,26 +233,28 @@ nav a.active::after {
   width: 100% !important;
   max-height: 400px !important;
   object-fit: contain !important;
-  background-color: rgba(15, 23, 42, 0.9) !important;
+  border-radius: 1rem !important;
+  border: 1px solid var(--border-color) !important;
+  overflow: hidden !important;
 }
 
 .meme-card-actions {
   display: flex !important;
   justify-content: space-between !important;
-  padding: 0.75rem 1rem !important;
-  border-top: 1px solid var(--border-color) !important;
+  padding: 0.5rem 1rem 0.75rem !important;
+  border-top: none !important;
 }
 
 .meme-card .p-5 {
-  padding: 1rem !important;
+  padding: 0.75rem 1rem !important;
 }
 
 .action-button {
   display: flex !important;
   align-items: center !important;
-  padding: 0.4rem 0.6rem !important;
-  border-radius: var(--border-radius) !important;
-  font-weight: 500 !important;
+  padding: 0.4rem !important;
+  border-radius: 9999px !important;
+  font-weight: 400 !important;
   transition: all 0.2s ease !important;
   background: transparent !important;
   border: none !important;
@@ -240,75 +264,73 @@ nav a.active::after {
 }
 
 .action-button:hover {
-  background-color: var(--bg-tertiary) !important;
+  background-color: rgba(29, 161, 242, 0.1) !important;
   color: var(--accent-color) !important;
 }
 
 .action-button svg {
-  margin-right: 0.5rem !important;
+  margin-right: 0.4rem !important;
 }
 
-/* Botones más compactos */
+/* Botones estilo X */
 button, .button {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
   padding: 0.5rem 1rem !important;
-  border-radius: var(--border-radius) !important;
-  font-weight: 500 !important;
-  letter-spacing: 0.01em !important;
-  transition: all 0.3s ease !important;
+  border-radius: 9999px !important; /* Botones completamente redondeados */
+  font-weight: 700 !important;
+  transition: background-color 0.2s ease !important;
   cursor: pointer !important;
   border: none !important;
-  position: relative !important;
-  overflow: hidden !important;
-  font-size: 0.9rem !important;
+  font-size: 0.95rem !important;
 }
 
 button.primary, .button.primary {
   background: var(--primary-color) !important;
   color: white !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+  box-shadow: none !important;
 }
 
 button.primary:hover, .button.primary:hover {
   background: var(--primary-hover) !important;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3) !important;
-  transform: translateY(-2px) !important;
+  box-shadow: none !important;
+  transform: none !important;
 }
 
 button.primary:active, .button.primary:active {
-  transform: translateY(1px) !important;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+  transform: none !important;
+  box-shadow: none !important;
+  background-color: #177bbf !important;
 }
 
 button.secondary, .button.secondary {
-  background-color: var(--bg-tertiary) !important;
+  background-color: transparent !important;
   color: var(--text-primary) !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+  box-shadow: none !important;
+  border: 1px solid var(--border-color) !important;
 }
 
 button.secondary:hover, .button.secondary:hover {
-  background-color: #4b5563 !important;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3) !important;
-  transform: translateY(-2px) !important;
+  background-color: rgba(239, 243, 244, 0.1) !important;
+  box-shadow: none !important;
+  transform: none !important;
 }
 
 button:disabled, .button:disabled {
-  opacity: 0.6 !important;
+  opacity: 0.5 !important;
   cursor: not-allowed !important;
   transform: none !important;
   box-shadow: none !important;
 }
 
-/* Layout más espacioso */
+/* Layout estilo X */
 .feed-layout {
   display: grid !important;
-  grid-template-columns: 1fr min(900px, 100%) 1fr !important;
-  gap: 2rem !important;
+  grid-template-columns: 1fr min(600px, 100%) 1fr !important;
   max-width: 1400px !important;
   margin: 0 auto !important;
-  padding: 1.5rem 1rem !important;
+  padding: 0 !important;
 }
 
 .feed-layout > * {
@@ -328,21 +350,21 @@ button:disabled, .button:disabled {
   }
   
   .feed-layout {
-    grid-template-columns: 1fr min(900px, 100%) 1fr !important;
+    grid-template-columns: 1fr min(600px, 100%) 1fr !important;
   }
 }
 
-/* Sidebar más compacta */
+/* Sidebar estilo X */
 .sidebar {
   position: sticky !important;
   top: 5rem !important;
   height: calc(100vh - 7rem) !important;
   overflow-y: auto !important;
   padding: 1rem !important;
-  background-color: var(--bg-secondary) !important;
-  border-radius: var(--border-radius) !important;
+  background-color: var(--bg-primary) !important;
+  border-radius: 1rem !important;
   border: 1px solid var(--border-color) !important;
-  box-shadow: var(--shadow-md) !important;
+  box-shadow: none !important;
 }
 
 /* Animaciones refinadas */
@@ -352,7 +374,7 @@ button:disabled, .button:disabled {
 }
 
 .animate-fadeIn {
-  animation: fadeIn 0.5s ease-out forwards;
+  animation: fadeIn 0.3s ease-out forwards;
 }
 
 @keyframes pulse {
@@ -365,26 +387,34 @@ button:disabled, .button:disabled {
   animation: pulse 2s infinite;
 }
 
-/* Componentes específicos con diseño mejorado */
+/* Componentes específicos con diseño estilo X */
 .hero-gradient {
-  background: linear-gradient(135deg, #374151 0%, #111827 100%);
+  background: var(--bg-primary);
   position: relative;
   overflow: hidden;
   color: white;
-  padding: 3rem 0;
-  border-radius: 0 0 1rem 1rem;
-  box-shadow: var(--shadow-md);
+  padding: 2rem 0;
+  border-radius: 0;
+  box-shadow: none;
+  border-bottom: 1px solid var(--border-color);
+  z-index: 0;
+  margin-top: 30px !important;
+  padding-top: 30px !important;
+  position: relative !important;
+  z-index: 10 !important;
 }
 
-.hero-gradient::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle at 70% 30%, rgba(96, 165, 250, 0.15) 0%, transparent 50%);
-  z-index: 0;
+.hero-gradient::before, 
+.hero-gradient::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  position: absolute !important;
+  background: none !important;
+  border-radius: 0 !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
 
 .hero-gradient > div {
@@ -396,15 +426,14 @@ button:disabled, .button:disabled {
   position: absolute;
   bottom: 0.5rem;
   right: 0.5rem;
-  background-color: rgba(15, 23, 42, 0.8);
+  background-color: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(4px);
-  padding: 0.25rem 0.5rem;
-  border-radius: var(--border-radius-sm);
-  font-weight: 600;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-weight: 700;
   font-size: 0.75rem;
   color: var(--success-color);
-  border: 1px solid var(--success-color);
-  box-shadow: 0 2px 5px rgba(16, 185, 129, 0.2);
+  border: none;
   display: flex;
   align-items: center;
   gap: 0.25rem;
@@ -419,66 +448,66 @@ button:disabled, .button:disabled {
 .icon-container {
   width: 3rem;
   height: 3rem;
-  background: var(--primary-color);
+  background: var(--bg-secondary);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 1rem;
-  box-shadow: 0 0 10px rgba(109, 40, 217, 0.3);
+  border: 1px solid var(--border-color);
 }
 
 .icon-number {
-  color: white;
+  color: var(--primary-color);
   font-weight: 700;
   font-size: 1.25rem;
 }
 
-/* Estilos adicionales para formularios */
+/* Estilos de formularios estilo X */
 input, textarea, select {
-  background-color: rgba(55, 65, 81, 0.5) !important;
+  background-color: var(--bg-primary) !important;
   border: 1px solid var(--border-color) !important;
   color: var(--text-primary) !important;
-  padding: 0.625rem 0.75rem !important;
-  border-radius: var(--border-radius) !important;
-  transition: all 0.25s ease !important;
+  padding: 0.75rem 1rem !important;
+  border-radius: 0.25rem !important;
+  transition: all 0.2s ease !important;
   width: 100% !important;
-  font-size: 0.9rem !important;
+  font-size: 1rem !important;
 }
 
 input:focus, textarea:focus, select:focus {
   outline: none !important;
-  border-color: var(--accent-color) !important;
-  box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.25) !important;
+  border-color: var(--primary-color) !important;
+  box-shadow: none !important;
 }
 
 ::placeholder {
   color: var(--text-secondary) !important;
-  opacity: 0.6 !important;
+  opacity: 0.8 !important;
 }
 
 label {
   display: block !important;
-  margin-bottom: 0.375rem !important;
+  margin-bottom: 0.5rem !important;
   font-weight: 500 !important;
   color: var(--text-secondary) !important;
-  font-size: 0.875rem !important;
+  font-size: 0.9rem !important;
 }
 
 /* Grupos de formularios */
 .form-group {
-  margin-bottom: 1.25rem !important;
+  margin-bottom: 1.5rem !important;
 }
 
-/* Enlaces y navegación */
+/* Enlaces estilo X */
 a {
-  color: var(--accent-color) !important;
+  color: var(--primary-color) !important;
   text-decoration: none !important;
   transition: color 0.2s ease !important;
-  position: relative;
 }
 
 a:hover {
+  text-decoration: underline !important;
   color: var(--primary-color) !important;
 }
 
@@ -498,42 +527,174 @@ a:hover {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-color);
+  background: var(--border-color);
 }
 
 /* Contenedores de tarjeta para contenido adicional */
 .content-card {
   background-color: var(--bg-secondary);
-  border-radius: var(--border-radius);
-  padding: 1.25rem;
-  margin-bottom: 1.25rem;
+  border-radius: 1rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
   border: 1px solid var(--border-color);
-  box-shadow: var(--shadow-md);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: none;
+  transition: background-color 0.2s ease;
 }
 
 .content-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-lg);
+  background-color: rgba(255, 255, 255, 0.03);
+  transform: none;
+  box-shadow: none;
 }
 
 /* Utilidades */
 .glass-effect {
-  background: rgba(31, 41, 55, 0.7);
+  background: rgba(22, 24, 28, 0.7);
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-color);
+  box-shadow: none;
 }
 
 .border-gradient {
   position: relative;
-  border-radius: var(--border-radius);
+  border-radius: 1rem;
   padding: 1px;
-  background: var(--accent-color);
+  background: transparent;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  z-index: auto;
+}
+
+.border-gradient::before, 
+.border-gradient::after {
+  content: none !important;
+  display: none !important;
+  position: absolute !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: none !important;
+  border-radius: 0 !important;
+  z-index: -1 !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
 
 .border-gradient-content {
-  background: var(--bg-secondary);
-  border-radius: calc(var(--border-radius) - 1px);
-  padding: 1rem;
+  background: transparent;
+  border-radius: 1rem;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Remover cualquier círculo o elemento de fondo no deseado globalmente */
+*::before,
+*::after {
+  z-index: -1;
+}
+
+/* Específicamente para el ícono de lupa */
+svg[viewBox="0 0 24 24"] {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  overflow: visible;
+}
+
+/* Restringir todos los SVG para prevenir el problema del círculo gigante */
+svg {
+  max-width: 100% !important;
+  max-height: 100% !important;
+  overflow: hidden !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Selector más específico para elementos de búsqueda */
+nav svg, 
+button svg,
+.search-icon svg {
+  width: 1em !important;
+  height: 1em !important;
+}
+
+/* Restablecer los pseudo-elementos para permitir su uso normal */
+*::before,
+*::after {
+  z-index: -1;
+}
+
+/* Específicamente desactivar pseudo-elementos solo en los componentes problemáticos */
+.hero-gradient::before,
+.hero-gradient::after,
+.border-gradient::before,
+.border-gradient::after {
+  display: none !important;
+}
+
+/* Prevenir el círculo blanco gigante */
+.hero-section::before,
+.hero-section::after,
+section::before,
+section::after {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  content: none !important;
+}
+
+/* Asegurarse de que los SVG específicos del ícono de búsqueda estén controlados */
+svg[viewBox="0 0 24 24"] {
+  width: auto !important;
+  height: auto !important;
+  max-width: 1em !important;
+  max-height: 1em !important;
+}
+
+/* Ajustes para evitar que las imágenes tapen el contenido */
+img, 
+Image, 
+image,
+svg,
+picture,
+video {
+  max-width: 100% !important;
+  max-height: 500px !important;
+  height: auto !important;
+  object-fit: contain !important;
+  z-index: 0 !important;
+}
+
+/* Asegurar que el contenido principal esté por encima y sea visible */
+main {
+  position: relative !important;
+  z-index: 1 !important;
+  background-color: var(--bg-primary) !important;
+}
+
+/* Corregir la visualización de la navbar */
+nav {
+  max-height: 70px !important;
+}
+
+/* Reset de estilos que podrían estar causando problemas */
+.bg-black {
+  display: block !important;
+  overflow: visible !important;
+  height: auto !important;
+  position: static !important;
+}
+
+/* Evitar que elementos a pantalla completa oculten contenido */
+.min-h-screen {
+  min-height: 100vh !important;
+  height: auto !important; 
+  overflow: visible !important;
+}
+
+/* Eliminar posiciones absolutas problemáticas */
+[style*="position: absolute"],
+[style*="position:absolute"] {
+  position: relative !important;
+  max-height: 500px !important;
 }

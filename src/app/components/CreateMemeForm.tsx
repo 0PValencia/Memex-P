@@ -275,7 +275,7 @@ export default function CreateMemeForm({ onMemeCreated }: { onMemeCreated?: () =
                   width={400} 
                   height={300}
                   className="mx-auto rounded-lg max-h-64 w-auto object-contain"
-                  unoptimized={true}
+                  unoptimized={false}
                 />
                 <button
                   type="button"

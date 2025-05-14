@@ -5,36 +5,20 @@ import ConnectWallet from './ConnectWallet'
 
 export default function Navbar() {
   return (
-    <nav>
-      <div className="container mx-auto flex justify-between items-center">
-        <div>
-          <Link href="/" className="font-bold text-2xl text-accent-color">
+    <nav className="backdrop-blur-md bg-opacity-90 bg-bg-primary w-full border-b border-gray-800">
+      {/* Estructura de dos elementos en extremos opuestos */}
+      <div className="flex items-center justify-between h-14 px-4 max-w-screen-2xl mx-auto">
+        {/* Logo a la izquierda */}
+        <div className="flex">
+          <Link href="/" className="memex-logo">
             Memex
           </Link>
         </div>
-
-        <div className="flex items-center space-x-2">
-          <Link href="/" className="px-3 py-2">
-            Inicio
-          </Link>
-          <Link href="/dashboard" className="px-3 py-2">
-            Dashboard
-          </Link>
-          <Link href="/trending" className="px-3 py-2">
-            Trending
-          </Link>
-          <Link href="/explore" className="px-3 py-2">
-            Explorar
-          </Link>
-          <Link href="/create" className="px-3 py-2">
-            Crear
-          </Link>
-          <Link href="/profile" className="px-3 py-2">
-            Perfil
-          </Link>
+        
+        {/* Conectar wallet a la derecha, con un z-index menor */}
+        <div className="ml-auto relative" style={{ zIndex: 5 }}>
+          <ConnectWallet />
         </div>
-
-        <ConnectWallet />
       </div>
     </nav>
   )

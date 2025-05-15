@@ -8,6 +8,7 @@ Memex es una plataforma social descentralizada que permite a los usuarios crear,
 - 💰 Apuesta por memes que crees que se volverán virales
 - 💸 Recibe recompensas cuando tus apuestas aciertan
 - 🔗 Todo integrado en la red Base para transacciones rápidas y de bajo costo
+- 🌐 Distribución en feeds sociales a través de MiniKit
 
 ## Tecnologías
 
@@ -15,6 +16,7 @@ Memex es una plataforma social descentralizada que permite a los usuarios crear,
 - **Web3**: Wagmi, Viem, Coinbase Wallet
 - **Almacenamiento**: IPFS a través de Infura
 - **Contratos**: Solidity con OpenZeppelin
+- **Integración Social**: MiniKit para distribución en feeds sociales
 
 ## Requisitos
 
@@ -62,6 +64,7 @@ Memex es una plataforma social descentralizada que permite a los usuarios crear,
 2. Crean memes que se almacenan en IPFS y se mintean como NFTs
 3. Otros usuarios pueden apostar por memes que creen que se volverán virales
 4. Cuando un meme se marca como viral, los apostadores y el creador reciben recompensas
+5. Los memes se pueden compartir directamente en feeds sociales gracias a la integración con MiniKit
 
 ## Licencia
 
